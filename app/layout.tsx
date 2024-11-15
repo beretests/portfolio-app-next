@@ -4,7 +4,7 @@ import "./globals.css";
 import Header from "./components/Header";
 import Favicon from "./portfolio-logo-white.png";
 import Footer from "./components/Footer";
-import { usePageTracking } from "../lib/usePageTracking";
+import { TrackingComponent } from "./TrackingComponent";
 
 const sourceSans = localFont({
   src: "./fonts/SourceSans3-VariableFont_wght.ttf",
@@ -47,13 +47,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // usePageTracking();
-
   return (
     <html lang="en">
       <body
         className={`${sourceSans.variable} ${playfairDisplay.variable} ${lora.variable} ${dmSans.variable} ${engagement.variable} antialiased`}
       >
+        <TrackingComponent />
         <Header />
         {children}
         <Footer />

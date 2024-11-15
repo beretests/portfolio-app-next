@@ -51,10 +51,10 @@ const Header: React.FC = () => {
         </Link>
 
         <nav className="hidden md:flex space-x-4">
+          <NavLink href="/about">About</NavLink>
           <NavLink href="/resume">Resume</NavLink>
           <NavLink href="/projects">Projects</NavLink>
           <NavLink href="/blog">Blog</NavLink>
-          <NavLink href="/contact">Contact</NavLink>
         </nav>
 
         <button
@@ -71,6 +71,9 @@ const Header: React.FC = () => {
 
       {isMenuOpen && (
         <nav className="md:hidden bg-secondary px-4 py-2">
+          <NavLink href="/about" onClick={toggleMenu}>
+            About
+          </NavLink>
           <NavLink href="/resume" onClick={toggleMenu}>
             Resume
           </NavLink>
@@ -79,9 +82,6 @@ const Header: React.FC = () => {
           </NavLink>
           <NavLink href="/blog" onClick={toggleMenu}>
             Blog
-          </NavLink>
-          <NavLink href="/contact" onClick={toggleMenu}>
-            Contact
           </NavLink>
         </nav>
       )}
