@@ -18,7 +18,7 @@ export default function Home() {
           </div>
 
           <p>Thanks for stopping by 😍!</p>
-          <div className="flex flex-col md:flex-row md:gap-4 justify-center">
+          <div className="flex flex-col md:flex-row md:gap-4 pt-4 justify-center">
             <Button href="/resume" className="pb-2">
               My resume
             </Button>
