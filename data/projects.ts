@@ -2,7 +2,7 @@ export const projects = [
   {
     id: "15c4b285-82be-4978-b434-fee1e4f5679f",
     name: "Funstats App - Refactored Project",
-    status: "In Progress",
+    status: "WIP",
     gifUrl:
       "https://res.cloudinary.com/dsspeyssh/image/upload/t_Thumbnail/v1731782768/portfolio-logo-darkblue_tp7pao.png",
     // liveUrl: "https://example.com/project1",
