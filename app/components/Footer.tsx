@@ -13,7 +13,7 @@ const Footer = () => {
     <footer className="bg-secondary text-foreground py-4">
       <div className="container mx-auto px-4">
         <div className="flex flex-col sm:flex-row justify-between items-center">
-          <p className="mb-4 sm:mb-0">
+          <p className="mb-4 sm:mb-0 text-primary">
             &copy; 2024 Beretests. All rights reserved.
           </p>
           <div className="flex justify-center sm:justify-end space-x-4 w-full sm:w-auto">

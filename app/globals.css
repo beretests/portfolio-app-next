@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* @import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css"; */
 
 :root {
   --background: #F2F0EA;
@@ -17,6 +19,7 @@
   --error: #E62739;
   --warning: #FF851B;
   --divider: #cccccc;
+  --resume: #be577f;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,12 +32,14 @@
     --border-primary: #4A4A4A;
     --border-secondary: #C11C84;
     --link: #00FFFF;
-    --success: #98FF98
+    --success: #98FF98;
     --hover: #C63287;
     --active: #001F3F;
     --error: #E7473C;
     --warning: #FFDD00;
     --divider: #333333;
+    --resume: #ffbed5;
+
   }
 }
 
@@ -48,4 +53,8 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
 }

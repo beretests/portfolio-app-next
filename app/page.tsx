@@ -9,7 +9,7 @@ export default function Home() {
     <div className="font-[family-name:var(--font-headings)] h-[82vh] flex flex-col">
       <HeroSection />
       <section className="pt-16 flex justify-center items-center h-[30vh]">
-        <div className="text-center">
+        <div className="grid text-center justify-items-center content-center ">
           <h2 className="text-2xl font-bold mb-4">
             Welcome to my portfolio website!
           </h2>
@@ -17,12 +17,20 @@ export default function Home() {
             <VisitorCounter />
           </div>
 
-          <p>Thanks for stopping by 😍!</p>
+          <p className="pt-2">Thanks for stopping by 😍!</p>
           <div className="flex flex-col md:flex-row md:gap-4 pt-4 justify-center">
-            <Button href="/resume" className="pb-2">
+            <Button
+              href="/resume"
+              className="pb-2 font-[family-name:var(--font-cta)] px-4 bg-highlight font-semibold"
+            >
               My resume
             </Button>
-            <Button href="/projects">My projects</Button>
+            <Button
+              href="/projects"
+              className="font-[family-name:var(--font-cta)] font-foreground px-4 bg-highlight font-semibold"
+            >
+              My projects
+            </Button>
           </div>
         </div>
       </section>

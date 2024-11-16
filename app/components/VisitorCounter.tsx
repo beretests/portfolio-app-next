@@ -20,5 +20,9 @@ export function VisitorCounter() {
 
   if (count === null) return null;
 
-  return <div>Unique Visitors: {count}</div>;
+  return (
+    <p className="text-secondary w-48 font-lg bg-primary font-semibold hover:bg-hover hover:text-primary rounded">
+      Unique Visitors: {count}
+    </p>
+  );
 }

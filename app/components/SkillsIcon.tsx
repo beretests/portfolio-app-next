@@ -39,9 +39,9 @@ const icons = [
   { component: SiKubernetes, label: "Kubernetes" },
   { component: FaCloudflare, label: "Cloudflare" },
   { component: SiNginx, label: "Nginx" },
-  { component: SiTailwindcss, label: "Tailwindcss" },
+  { component: SiTailwindcss, label: "Tailwind" },
   { component: SiTypescript, label: "Typescript" },
-  { component: TbBrandReactNative, label: "React Native" },
+  { component: TbBrandReactNative, label: "ReactNative" },
   { component: BiLogoPostgresql, label: "Postgresql" },
   { component: SiMysql, label: "Mysql" },
   { component: FaNodeJs, label: "NodeJs" },
@@ -58,14 +58,16 @@ const icons = [
 
 const SkillsIcons: React.FC = () => {
   return (
-    <div className="grid grid-cols-4 md:grid-cols-6 justify-center gap-4 p-4 md:p-8 rounded-lg bg-secondary shadow-lg">
+    <div className="grid grid-cols-center-3 md:grid-cols-center-6 justify-center gap-4 p-4 md:p-8 rounded-lg bg-link shadow-lg">
       {icons.map(({ component: Icon, label }, index) => (
         <div
           key={index}
-          className="flex flex-col justify-center items-center space-y-2 transition-transform transform hover:scale-110 hover:text-red-500"
+          className="flex flex-col justify-center items-center space-y-2 transition-transform transform hover:scale-110 hover:text-hover"
         >
-          <Icon className="text-4xl text-primary transition-colors" />
-          <span className="text-sm font-medium text-gray-200">{label}</span>
+          <Icon className="text-4xl text-resume dark:text-primary transition-colors" />
+          <span className="text-sm font-medium text-resume dark:text-primary">
+            {label}
+          </span>
         </div>
       ))}
     </div>

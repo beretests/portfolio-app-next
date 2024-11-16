@@ -26,9 +26,10 @@ const config: Config = {
         error: "var(--error)",
         warning: "var(--warning)",
         divider: "var(--divider)",
+        resume: "var(--resume)",
       },
     },
   },
-  plugins: [],
+  plugins: [require("@khoohaoyit/tailwind-grid-center")],
 };
 export default config;

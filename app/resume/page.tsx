@@ -5,19 +5,27 @@ const ResumePage: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-8">
       <header className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2">Eberechi Omeje</h1>
-        <p className="text-lg text-gray-600">Software Engineer</p>
+        <h1 className="text-3xl sm:text-4xl text-primary font-bold mb-2 font-[family-name:var(--font-headings)]">
+          Eberechi Omeje
+        </h1>
+        <p className="text-xl font-[family-name:var(--font-highlights)] font-bold text-resume">
+          Software Engineer
+        </p>
       </header>
 
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Work Experience</h2>
+        <h2 className="text-2xl font-[family-name:var(--font-headings)] font-semibold mb-4">
+          Work Experience
+        </h2>
         <div className="mb-4">
-          <h3 className="text-xl font-medium">Software Engineer</h3>
-          <p className="grid md:grid-cols-2 text-gray-600">
+          <h3 className="text-xl font-medium font-[family-name:var(--font-headings)]">
+            Software Engineer
+          </h3>
+          <p className="font-semibold grid md:grid-cols-2 text-resume font-[family-name:var(--font-highlights)]">
             Portage CyberTech
             <span className="md:justify-self-end">April 2021 - Current</span>
           </p>
-          <ul className="list-disc list-outside mt-2 px-4 gap-2">
+          <ul className="text-sm md:text-lg list-disc list-outside mt-2 px-4 gap-2 font-[family-name:var(--font-body)]">
             <li className="mb-2">
               Developed and maintained automated test scripts for critical
               features using Playwright similar to Cypress, improving test
@@ -49,12 +57,14 @@ const ResumePage: React.FC = () => {
           </ul>
         </div>
         <div className="mb-4">
-          <h3 className="text-xl font-medium">Customer Support Specialist</h3>
-          <p className="grid md:grid-cols-2 text-gray-600">
+          <h3 className="text-xl font-medium font-[family-name:var(--font-headings)]">
+            Customer Support Specialist
+          </h3>
+          <p className="font-semibold grid md:grid-cols-2 text-resume font-[family-name:var(--font-highlights)]">
             Portage CyberTech
             <span className="md:justify-self-end">June 2020 - April 2021</span>
           </p>
-          <ul className="list-disc list-outside mt-2 px-4">
+          <ul className="font-[family-name:var(--font-body)] text-sm md:text-lg list-disc list-outside mt-2 px-4">
             <li className="mb-2">
               Consistently maintained above 98% customer satisfaction rating and
               reduced average resolution time by 25% through effective
@@ -71,12 +81,14 @@ const ResumePage: React.FC = () => {
           </ul>
         </div>
         <div className="mb-4">
-          <h3 className="text-xl font-medium">IT Support Specialist</h3>
-          <p className="grid md:grid-cols-2 text-gray-600">
+          <h3 className="text-xl font-medium font-[family-name:var(--font-headings)]">
+            IT Support Specialist
+          </h3>
+          <p className="font-semibold grid md:grid-cols-2 text-resume font-[family-name:var(--font-highlights)]">
             Digital Solutions Limited
             <span className="md:justify-self-end">July 2012 - August 2018</span>
           </p>
-          <ul className="list-disc list-outside mt-2 px-4">
+          <ul className="font-[family-name:var(--font-body)] text-sm md:text-lg list-disc list-outside mt-2 px-4">
             <li className="mb-2">
               Delivered both on-site and remote IT support services, resolving
               95% of tickets within SLA timeframes using remote desktop
@@ -105,24 +117,32 @@ const ResumePage: React.FC = () => {
       </section>
 
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Education</h2>
+        <h2 className="text-2xl font-semibold mb-4 font-[family-name:var(--font-headings)]">
+          Education
+        </h2>
         <div className="mb-4">
-          <h3 className="text-xl font-medium">
+          <h3 className="text-xl font-medium font-[family-name:var(--font-headings)]">
             Bachelors in Electrical Engineering
           </h3>
-          <p className="text-gray-600">University of Nigeria, Nsukka</p>
+          <p className="font-semibold text-resume font-[family-name:var(--font-highlights)]">
+            University of Nigeria, Nsukka
+          </p>
         </div>
         <div className="mb-4">
-          <h3 className="text-xl font-medium">
+          <h3 className="text-xl font-medium font-[family-name:var(--font-headings)]">
             Diploma in Software Engineering
           </h3>
-          <p className="text-gray-600">BrainStation</p>
+          <p className="font-semibold text-resume font-[family-name:var(--font-highlights)]">
+            BrainStation
+          </p>
         </div>
       </section>
 
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Skills</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+        <h2 className="text-2xl font-semibold mb-4 font-[family-name:var(--font-headings)]">
+          Skills
+        </h2>
+        <div className="grid md:grid-cols-center-3 font-[family-name:var(--font-body)] gap-2 md:text-lg">
           {[
             "CI/CD",
             "User Authentication",
@@ -140,29 +160,31 @@ const ResumePage: React.FC = () => {
       </section>
 
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl font-semibold mb-4 font-[family-name:var(--font-headings)]">
           Programming Languages and Frameworks
         </h2>
         <SkillsIcons />
       </section>
 
       <section className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">
+        <h2 className="text-2xl font-semibold mb-4 font-[family-name:var(--font-headings)]">
           Professional Development
         </h2>
-        <h3 className="grid md:grid-cols-2">
-          Beyond the Cloud | Information and Communications Technology Council
-          (ICTC)
+        <h3 className="font-[family-name:var(--font-headings)]">
+          Beyond the Cloud
+        </h3>
+        <h4 className="font-semibold grid md:grid-cols-2 font-[family-name:var(--font-highlights)] text-resume">
+          Information and Communications Technology Council (ICTC)
           <span className="md:justify-self-end md:align-text-bottom">
             September 2024 – Present
           </span>
-        </h3>
-        <p className="pt-4">
+        </h4>
+        <p className="pt-4 font-[family-name:var(--font-body)] md:text-lg">
           Selected for a 10-week customized training program, funded by Upskill
           Canada (powered by Palette Skills) and the Government of Canada.
           Courses included:
         </p>
-        <ul className="list-disc list-inside">
+        <ul className="list-disc list-outside px-4 font-[family-name:var(--font-body)] md:text-lg">
           <li>DevOps Culture and Mindset</li>
           <li>DevOps Engineering on AWS</li>
           <li>Managing Cloud-native Applications with Kubernetes</li>
@@ -180,11 +202,20 @@ const ResumePage: React.FC = () => {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold mb-4">Certifications</h2>
+        <h2 className="text-2xl font-semibold mb-4 font-[family-name:var(--font-headings)]">
+          Certifications
+        </h2>
         <ul className="list-disc list-inside">
           <li className="grid md:grid-cols-2">
-            <a className="md:justify-self-start">Azure Fundamentals</a>
-            <span className="justify-self-end">Microsoft | December 2023</span>
+            <a
+              href="https://learn.microsoft.com/api/credentials/share/en-us/EberechiOmeje-2197/4CA5DC98DF4A8A0B?sharingId=28349FDD3BFB15E3"
+              className="md:justify-self-start text-resume hover:text-link font-semibold font-[family-name:var(--font-highlights)]"
+            >
+              Azure Fundamentals
+            </a>
+            <span className="md:justify-self-end font-[family-name:var(--font-highlights)]">
+              Microsoft | December 2023
+            </span>
           </li>
         </ul>
       </section>

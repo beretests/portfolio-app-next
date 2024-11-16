@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
-import DarkLogo from "./../portfolio-logo-pink.png";
-import LightLogo from "./../portfolio-logo-lightpink.png";
+import DarkLogo from "./../images/portfolio-logo-pink.png";
+import LightLogo from "./../images/portfolio-logo-lightpink.png";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { usePathname } from "next/navigation";
 
@@ -54,7 +54,7 @@ const Header: React.FC = () => {
           <NavLink href="/about">About</NavLink>
           <NavLink href="/resume">Resume</NavLink>
           <NavLink href="/projects">Projects</NavLink>
-          <NavLink href="/blog">Blog</NavLink>
+          {/* <NavLink href="/blog">Blog</NavLink> */}
         </nav>
 
         <button
@@ -80,9 +80,9 @@ const Header: React.FC = () => {
           <NavLink href="/projects" onClick={toggleMenu}>
             Projects
           </NavLink>
-          <NavLink href="/blog" onClick={toggleMenu}>
+          {/* <NavLink href="/blog" onClick={toggleMenu}>
             Blog
-          </NavLink>
+          </NavLink> */}
         </nav>
       )}
     </header>

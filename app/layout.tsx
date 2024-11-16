@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./components/Header";
-import Favicon from "./portfolio-logo-white.png";
+import Favicon from "./images/portfolio-logo-white.png";
 import Footer from "./components/Footer";
 import { TrackingComponent } from "./TrackingComponent";
 
