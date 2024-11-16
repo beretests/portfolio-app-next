@@ -2,7 +2,7 @@
 import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
 
 const nextConfig = {
-  output: "export",
+  // output: "export",
   images: {
     domains: ["res.cloudinary.com"],
   },
@@ -11,7 +11,7 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
-  missingSuspenseWithCSRBailout: false,
+  // missingSuspenseWithCSRBailout: false,
 };
 
 if (process.env.NODE_ENV === "development") {
