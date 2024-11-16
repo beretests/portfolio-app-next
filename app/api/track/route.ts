@@ -5,6 +5,8 @@ let cachedCount: number | null = null;
 let lastFetchTime = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
+export const runtime = "edge";
+
 async function getGeolocation(ip: string) {
   const response = await fetch(`https://ipapi.co/${ip}/json/`);
   return response.json();

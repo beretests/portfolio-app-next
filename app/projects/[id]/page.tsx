@@ -4,6 +4,12 @@ interface ProjectPageProps {
   params: { id: string };
 }
 
+export async function generateStaticParams() {
+  return projects.map((project) => ({
+    id: project.id,
+  }));
+}
+
 export default function ProjectPage({ params }: ProjectPageProps) {
   const project = projects.find((p) => p.id === params.id);
 
