@@ -15,17 +15,7 @@ interface ProjectCardProps {
   };
 }
 
-const project_status = [
-  { value: "In Progress", color: "bg-warning" },
-  { value: "Live", color: "bg-success" },
-  { value: "Not Started", color: "bg-error" },
-];
-
 export default function ProjectCard({ project }: ProjectCardProps) {
-  const matchedStatus = project_status.find(
-    (status) => status.value === project.status
-  );
-
   return (
     <div className="rounded-lg shadow-md overflow-hidden bg-resume mb-8 font-[family-name:var(--font-body)]">
       <Image
