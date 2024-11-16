@@ -21,13 +21,17 @@ export default function Home() {
           <div className="flex flex-col md:flex-row md:gap-4 pt-4 justify-center">
             <Button
               href="/resume"
-              className="pb-2 font-[family-name:var(--font-cta)] px-4 bg-highlight font-semibold"
+              variant="contained"
+              color="secondary"
+              className="pb-2 font-[family-name:var(--font-cta)] px-4 font-semibold"
             >
               My resume
             </Button>
             <Button
               href="/projects"
-              className="font-[family-name:var(--font-cta)] font-foreground px-4 bg-highlight font-semibold"
+              variant="contained"
+              color="secondary"
+              className="font-[family-name:var(--font-cta)] font-foreground px-4 font-semibold"
             >
               My projects
             </Button>
