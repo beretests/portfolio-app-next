@@ -8,11 +8,11 @@ export const projects = [
     // liveUrl: "https://example.com/project1",
     githubUrl: "https://github.com/beretests/funstats-next-app",
     background: "I started with...",
-    objectives: "The goal of this project was to...",
+    objectives: ["The goal of this project was to..."],
     assumptions: ["Assumption 1", "Assumption 2"],
     designChoices: ["I chose to..."],
     techStack: ["React", "Node.js", "MongoDB"],
-    techStackReasoning: "I chose this tech stack because...",
+    // techStackReasoning: "I chose this tech stack because...",
     challenges: [
       {
         title: "Challenge 1",
@@ -34,11 +34,11 @@ export const projects = [
     liveUrl: "https://ctk-songs.beretesting.com/",
     githubUrl: "https://github.com/beretests/choir-repertoire",
     background: "I started with...",
-    objectives: "The goal of this project was to...",
+    objectives: ["The goal of this project was to..."],
     assumptions: ["Assumption 1", "Assumption 2"],
     designChoices: ["I chose to..."],
     techStack: ["React", "Node.js", "MongoDB"],
-    techStackReasoning: "I chose this tech stack because...",
+    // techStackReasoning: "I chose this tech stack because...",
     challenges: [
       {
         title: "Challenge 1",
@@ -53,18 +53,42 @@ export const projects = [
   },
   {
     id: "db8d898d-5c9a-435d-84f4-c049417e5f49",
-    name: "Discord Bot - Leetcode Easy Questions",
+    name: "LeetCode Daily Challenge Discord Bot",
     status: "Live",
     gifUrl:
       "https://res.cloudinary.com/dsspeyssh/image/upload/t_Thumbnail/v1731782768/portfolio-logo-darkblue_tp7pao.png",
     githubUrl:
       "https://github.com/beretests/Useful-python-scripts/blob/discord-leetcode-bot/discord-leetcode/discord-leetcode-db.py",
-    background: "I started with...",
-    objectives: "The goal of this project was to...",
-    assumptions: ["Assumption 1", "Assumption 2"],
-    designChoices: ["I chose to..."],
-    techStack: ["React", "Node.js", "MongoDB"],
-    techStackReasoning: "I chose this tech stack because...",
+    background:
+      "I had just completed my diploma in software engineering from a bootcamp, and was applying for jobs as a software developer. It became immediately apparent that most  dev jobs required applicants to complete coding challenges and these coding challenges were similar if not the same as Leetcode challenges. I found those questions difficult to complete on my own so I decided to make solving them more interactive sending a Leetcode question a day to a thread in the Discord channel I shared with other graduates in my cohort. I had basic knowledge of Python and none of discord bot development.I was familiar with AWS DynamoDB (for data storage) and understood basic web scraping techniques.",
+    objectives: [
+      "To create an automated system for sharing daily LeetCode challenges in a Discord community",
+      "To enhance coding practice and engagement among Discord server members",
+      "To learn more about integrating various technologies like Discord API, AWS services, and web scraping",
+      "To automate the process of curating and sharing coding challenges, saving time for community managers",
+    ],
+    assumptions: [
+      "Discord users would be interested in daily coding challenges",
+      "A 24-hour interval between challenges would be suitable for most users",
+      "Users would prefer challenges to be posted in threaded discussions for better organization",
+    ],
+    designChoices: [
+      "Discord's thread feature to organize challenges and discussions",
+      "Implemented a DynamoDB table to track posted and unposted questions",
+      "Web scraping to extract question details from LeetCode with LeetScrape API",
+      "Developed a message splitting function to handle long challenge descriptions given Discord's 2000 character limit",
+      "Implemented a scheduled task to post challenges at regular intervals",
+      "Used environment variables for sensitive information like API tokens",
+    ],
+    techStack: [
+      "Python: Chosen for its simplicity and rich ecosystem of libraries",
+      "Discord.py: For easy integration with Discord's API",
+      "Boto3: To interact with AWS services, specifically DynamoDB",
+      "LeetScrape: A custom module for scraping LeetCode questions",
+      "AWS DynamoDB: For efficient and scalable storage of question data",
+      "dotenv: For managing environment variables securely",
+    ],
+    // techStackReasoning: "I chose this tech stack because...",
     challenges: [
       {
         title: "Challenge 1",
@@ -75,7 +99,13 @@ export const projects = [
         solution: "I addressed this issue by...",
       },
     ],
-    learnings: ["Learning 1", "Learning 2"],
+    learnings: [
+      "Gained deeper understanding of asynchronous programming in Python",
+      "Improved skills in integrating multiple services (Discord, AWS, web scraping)",
+      "Learned techniques for handling and formatting large text content for Discord chat messages",
+      "Enhanced understanding of scheduled tasks and background processes in bots",
+      "Developed strategies for maintaining data consistency between external sources and local database",
+    ],
   },
   {
     id: "14b93b54-cecd-4f28-8a32-42036f9a95aa",
@@ -87,8 +117,13 @@ export const projects = [
     githubUrl: "https://github.com/beretests/brainstation-capstone-funstats",
     background:
       "I started with Basic knowledge of React and Express.js. Familiarity with relational databases and SQL. Understanding of RESTful API design principles. Experience with user authentication and authorization in web applications. Basic knowledge of cloud storage solutions like Cloudinary.",
-    objectives:
-      "The goal of this project was to  To create a user-friendly platform for athletes to track and compare their performance stats. To deepen my understanding of full-stack web development using React and Express. To explore integration of third-party services like Cloudinary for file storage. To challenge myself in creating a feature-rich application with social elements. To learn about data visualization and comparison features in web applications.",
+    objectives: [
+      "To create a user-friendly platform for athletes to track and compare their performance stats.",
+      "To deepen my understanding of full-stack web development using React and Express.",
+      "To explore integration of third-party services like Cloudinary for file storage.",
+      "To challenge myself in creating a feature-rich application with social elements.",
+      "To learn about comparison features in web applications.",
+    ],
     assumptions: [
       "Users would primarily access the app through web browsers",
       "Athletes would want to track and compare stats across different seasons",
@@ -114,7 +149,7 @@ export const projects = [
       "JSON Web Tokens (JWT): For secure authentication and authorization",
       "JSON Web Tokens (JWT): For secure authentication and authorization",
     ],
-    techStackReasoning: "I chose this tech stack because...",
+    // techStackReasoning: "I chose this tech stack because...",
     challenges: [
       {
         title: "Challenge 1",
@@ -148,8 +183,12 @@ export const projects = [
     // githubUrl: "https://github.com/beretests/brainstation-capstone-funstats",
     background:
       "asic knowledge of React Native and TypeScript amiliarity with Supabase as a backend service Understanding of authentication flows and user management Experience with form handling and data validation in React applications",
-    objectives:
-      "TTo create a comprehensive solution for athletes to track their performance across seasons and games To learn and implement modern mobile app development practices using React Native To explore real-time database capabilities and authentication services provided by Supabase To challenge myself in creating a complex, multi-feature application with a focus on user experience.",
+    objectives: [
+      "To create a comprehensive solution for athletes to track their performance across seasons and games",
+      "To learn and implement modern mobile app development practices using React Native",
+      "To explore real-time database capabilities and authentication services provided by Supabase",
+      "To challenge myself in creating a complex, multi-feature application with a focus on user experience.",
+    ],
     assumptions: [
       "Users would primarily access the app on mobile devices",
       "Athletes would want to track stats across multiple seasons and games",

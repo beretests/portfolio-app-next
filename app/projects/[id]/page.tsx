@@ -34,7 +34,12 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         <h2 className="text-2xl font-semibold mb-4 font-[family-name:var(--font-headings)]">
           Project Objectives
         </h2>
-        <p>{project.objectives}</p>
+        <ul className="list-disc pl-6">
+          {project.objectives.map((objective, index) => (
+            <li key={index}>{objective}</li>
+          ))}
+        </ul>
+        {/* <p>{project.objectives}</p> */}
       </section>
 
       <section className="mb-8">
