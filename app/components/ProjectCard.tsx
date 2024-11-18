@@ -42,7 +42,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           }}
           className="relative"
         >
-          <h2 className="text-xl text-wrap grow font-semibold mb-2 text-center pt-2 font-[family-name:var(--font-headings)] text-background">
+          <h2 className="text-xl text-wrap h-9 font-semibold text-center pt-2 mb-6 font-[family-name:var(--font-headings)] text-background">
             {project.name}
           </h2>
         </Badge>
