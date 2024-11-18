@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
   const data = await req.json();
   const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
   const geoData = await getGeolocation(ip);
+  const origin = req.headers.get("origin") || req.headers.get("host");
 
   // Check if there's an existing entry with the same session_id and user_agent
   const { data: recentEntry, error: fetchError } = await supabase
@@ -82,6 +83,7 @@ export async function POST(req: NextRequest) {
     user_agent: data.userAgent,
     city: geoData.city,
     referrer: data.referrer,
+    origin: origin,
     timestamp: new Date().toISOString(),
   };
 
