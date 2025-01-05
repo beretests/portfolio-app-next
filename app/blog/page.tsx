@@ -1,6 +1,11 @@
-const Blog: React.FC = () => {
-  const isMenuOpen = "";
-  return <></>;
+import Blog from "@/blog/Blog";
+
+const BlogPage: React.FC = () => {
+  return (
+    <>
+      <Blog />
+    </>
+  );
 };
 
-export default Blog;
+export default BlogPage;
