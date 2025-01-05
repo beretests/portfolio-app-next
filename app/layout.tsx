@@ -6,6 +6,7 @@ import Favicon from "./images/portfolio-logo-white.png";
 import Footer from "./components/Footer";
 import { TrackingComponent } from "./TrackingComponent";
 import { Suspense } from "react";
+
 const sourceSans = localFont({
   src: "./fonts/SourceSans3-VariableFont_wght.ttf",
   variable: "--font-body",
