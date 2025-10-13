@@ -13,7 +13,7 @@ export default function Home() {
           <h2 className="text-2xl font-bold mb-4">
             Welcome to my portfolio website!
           </h2>
-          <div className="text-gray-400">
+          <div className="text-secondary">
             <VisitorCounter />
           </div>
 
