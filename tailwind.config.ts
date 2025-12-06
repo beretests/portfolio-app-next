@@ -8,12 +8,28 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // backgroundImage: {
+      //   "gradient-radial": "radial-gradient(circle, var(--tw-gradient-stops))",
+      // },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: "var(--primary)",
+        secondary: "var(--secondary)",
+        highlight: "var(--highlight)",
+        borderPrimary: "var(--border-primary)",
+        borderSecondary: "var(--border-secondary)",
+        link: "var(--link)",
+        success: "var(--success)",
+        hover: "var(--hover)",
+        active: "var(--active)",
+        error: "var(--error)",
+        warning: "var(--warning)",
+        divider: "var(--divider)",
+        resume: "var(--resume)",
       },
     },
   },
-  plugins: [],
+  plugins: [require("@khoohaoyit/tailwind-grid-center")],
 };
 export default config;
