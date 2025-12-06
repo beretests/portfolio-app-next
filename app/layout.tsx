@@ -6,6 +6,14 @@ import Favicon from "./images/portfolio-logo-white.png";
 import Footer from "./components/Footer";
 import { TrackingComponent } from "./TrackingComponent";
 import { Suspense } from "react";
+// app/layout.tsx
+import { Dancing_Script } from "next/font/google";
+
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-special",
+});
 
 const sourceSans = localFont({
   src: "./fonts/SourceSans3-VariableFont_wght.ttf",
@@ -51,7 +59,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${sourceSans.variable} ${playfairDisplay.variable} ${lora.variable} ${dmSans.variable} ${engagement.variable} antialiased`}
+        className={`${sourceSans.variable} ${playfairDisplay.variable} ${lora.variable} ${dmSans.variable}  ${dancingScript.variable} antialiased`}
       >
         <Suspense>
           <TrackingComponent />

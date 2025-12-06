@@ -58,14 +58,14 @@ const icons = [
 
 const SkillsIcons: React.FC = () => {
   return (
-    <div className="grid grid-cols-center-3 md:grid-cols-center-6 justify-center gap-4 p-4 md:p-8 rounded-lg bg-link shadow-lg">
+    <div className="grid grid-cols-center-3 md:grid-cols-center-6 justify-center gap-4 p-4 md:p-8 rounded-lg bg-background border border-borderPrimary shadow-sm">
       {icons.map(({ component: Icon, label }, index) => (
         <div
           key={index}
-          className="flex flex-col justify-center items-center space-y-2 transition-transform transform hover:scale-110 hover:text-hover"
+          className="flex flex-col justify-center items-center space-y-2 transition-transform transform hover:scale-105 focus-within:scale-105 focus-within:ring-2 focus-within:ring-primary rounded-md p-2"
         >
-          <Icon className="text-4xl text-resume dark:text-primary transition-colors" />
-          <span className="text-sm font-medium text-resume dark:text-primary">
+          <Icon className="text-4xl text-primary dark:text-highlight transition-colors" aria-hidden />
+          <span className="text-sm font-semibold text-foreground dark:text-active">
             {label}
           </span>
         </div>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Markdown from "markdown-to-jsx";
 import { supabase } from "@/lib/supabase";
 import { cookies } from "next/headers";
+import Image from "next/image";
 
 export const dynamicParams = true;
 
@@ -28,7 +29,7 @@ export default async function BlogPostPage({
     adminUser && adminPass
       ? Buffer.from(`${adminUser}:${adminPass}`).toString("base64")
       : null;
-  const cookieToken = cookies().get("admin-auth")?.value;
+  const cookieToken = (await cookies()).get("admin-auth")?.value;
   const isAdmin = expectedToken && cookieToken === expectedToken;
 
   let query = supabase
@@ -73,11 +74,16 @@ export default async function BlogPostPage({
       </header>
 
       <div className="rounded-2xl overflow-hidden border border-borderSecondary bg-background shadow-sm">
-        <img
-          src={post.image}
-          alt={post.title}
-          className="w-full h-auto object-cover border-b border-borderSecondary"
-        />
+        <div className="relative w-full aspect-[16/9] border-b border-borderSecondary bg-secondary/30">
+          <Image
+            src={post.image}
+            alt={post.title}
+            fill
+            sizes="(min-width: 1024px) 960px, 100vw"
+            className="object-cover"
+            priority={false}
+          />
+        </div>
         <div className="p-6 space-y-4">
           <p className="text-lg text-foreground/80 font-[family-name:var(--font-body)]">
             {post.description}
@@ -96,6 +102,12 @@ export default async function BlogPostPage({
                   props: {
                     className:
                       "text-2xl font-semibold font-[family-name:var(--font-headings)] mt-6 mb-3 text-foreground",
+                  },
+                },
+                h3: {
+                  props: {
+                    className:
+                      "text-xl font-semibold font-[family-name:var(--font-headings)] mt-4 mb-2 text-foreground",
                   },
                 },
                 ul: {
@@ -120,6 +132,23 @@ export default async function BlogPostPage({
                   props: {
                     className:
                       "overflow-x-auto rounded bg-secondary p-4 font-mono text-sm text-foreground",
+                  },
+                },
+                a: {
+                  props: {
+                    className:
+                      "text-link font-semibold underline underline-offset-4 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                  },
+                },
+                blockquote: {
+                  props: {
+                    className:
+                      "border-l-4 border-primary/50 pl-4 italic text-foreground/80 bg-secondary/30 py-2 rounded-r",
+                  },
+                },
+                hr: {
+                  props: {
+                    className: "my-6 border-t border-divider",
                   },
                 },
               },
