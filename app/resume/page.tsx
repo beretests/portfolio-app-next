@@ -4,7 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 type WorkItem = { role: string; company: string; dates: string; bullets: string[] };
 type EducationItem = { school: string; degree: string; dates: string; details?: string };
 type CertificationItem = { name: string; issuer?: string; date?: string };
-type LangFramework = { name: string; icon?: string };
+type LangFramework = { name: string; icon?: string | null };
 
 const fallback = {
   headline: "Software Engineer",
@@ -92,7 +92,9 @@ export default async function ResumePage() {
   const education = ((content?.education as EducationItem[]) || fallback.education) as EducationItem[];
   const skills = (content?.skills as string[]) || fallback.skills;
   const certifications = ((content?.certifications as CertificationItem[]) || fallback.certifications) as CertificationItem[];
-  const languages = ((content?.languages_frameworks as LangFramework[]) || fallback.languages_frameworks) as LangFramework[];
+  const languages = ((content?.languages_frameworks as LangFramework[]) || fallback.languages_frameworks).map(
+    (l) => ({ ...l, icon: l.icon ?? null })
+  );
 
   const hasContent =
     Boolean(summary) ||
