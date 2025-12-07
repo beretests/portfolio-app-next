@@ -23,33 +23,36 @@ import { FaCloudflare } from "react-icons/fa6";
 import { TbBrandReactNative } from "react-icons/tb";
 import type { ComponentType } from "react";
 
-type IconName =
-  | "React"
-  | "Javascript"
-  | "Nextjs"
-  | "Python"
-  | "Html5"
-  | "CSS3"
-  | "Supabase"
-  | "Docker"
-  | "Kubernetes"
-  | "Cloudflare"
-  | "Nginx"
-  | "Tailwind"
-  | "Typescript"
-  | "ReactNative"
-  | "Postgresql"
-  | "Mysql"
-  | "NodeJs"
-  | "K6"
-  | "Azure"
-  | "AWS"
-  | "Selenium"
-  | "Playwright"
-  | "Terraform"
-  | "Ansible"
-  | "Git"
-  | "Postman";
+export const iconNames = [
+  "React",
+  "Javascript",
+  "Nextjs",
+  "Python",
+  "Html5",
+  "CSS3",
+  "Supabase",
+  "Docker",
+  "Kubernetes",
+  "Cloudflare",
+  "Nginx",
+  "Tailwind",
+  "Typescript",
+  "ReactNative",
+  "Postgresql",
+  "Mysql",
+  "NodeJs",
+  "K6",
+  "Azure",
+  "AWS",
+  "Selenium",
+  "Playwright",
+  "Terraform",
+  "Ansible",
+  "Git",
+  "Postman",
+] as const;
+
+export type IconName = (typeof iconNames)[number];
 
 export type SkillsIconItem = { name: string; icon?: IconName | null };
 
