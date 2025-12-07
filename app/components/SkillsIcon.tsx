@@ -1,71 +1,119 @@
 import React from "react";
-// import JavascriptIcon from '@mui/icons-material/Javascript';
 import { FaReact } from "react-icons/fa";
-import { SiJavascript } from "react-icons/si";
-import { RiNextjsFill } from "react-icons/ri";
-import { FaPython } from "react-icons/fa6";
-import { FaHtml5 } from "react-icons/fa6";
-import { FaCss3Alt } from "react-icons/fa6";
-import { RiSupabaseFill } from "react-icons/ri";
-import { FaDocker } from "react-icons/fa6";
-import { SiKubernetes } from "react-icons/si";
-import { FaCloudflare } from "react-icons/fa6";
-import { SiNginx } from "react-icons/si";
-import { SiTailwindcss } from "react-icons/si";
-import { SiTypescript } from "react-icons/si";
-import { TbBrandReactNative } from "react-icons/tb";
+import { FaGit, FaHtml5 } from "react-icons/fa";
+import { FaAws, FaCss3Alt, FaDocker, FaNodeJs, FaPython } from "react-icons/fa6";
+import { RiNextjsFill, RiSupabaseFill } from "react-icons/ri";
 import { BiLogoPostgresql } from "react-icons/bi";
-import { SiMysql } from "react-icons/si";
-import { FaNodeJs } from "react-icons/fa6";
-import { SiK6 } from "react-icons/si";
-import { SiMicrosoftazure } from "react-icons/si";
-import { FaAws } from "react-icons/fa6";
-import { SiSelenium } from "react-icons/si";
-import { SiPlaywright } from "react-icons/si";
-import { SiTerraform } from "react-icons/si";
-import { SiAnsible } from "react-icons/si";
-import { FaGit } from "react-icons/fa";
-import { SiPostman } from "react-icons/si";
+import {
+  SiAnsible,
+  SiJavascript,
+  SiK6,
+  SiKubernetes,
+  SiMicrosoftazure,
+  SiMysql,
+  SiNginx,
+  SiPlaywright,
+  SiPostman,
+  SiSelenium,
+  SiTailwindcss,
+  SiTerraform,
+  SiTypescript,
+} from "react-icons/si";
+import { FaCloudflare } from "react-icons/fa6";
+import { TbBrandReactNative } from "react-icons/tb";
+import type { ComponentType } from "react";
 
-const icons = [
-  { component: FaReact, label: "React" },
-  { component: SiJavascript, label: "Javascript" },
-  { component: RiNextjsFill, label: "Nextjs" },
-  { component: FaPython, label: "Python" },
-  { component: FaHtml5, label: "Html5" },
-  { component: FaCss3Alt, label: "CSS3" },
-  { component: RiSupabaseFill, label: "Supabase" },
-  { component: FaDocker, label: "Docker" },
-  { component: SiKubernetes, label: "Kubernetes" },
-  { component: FaCloudflare, label: "Cloudflare" },
-  { component: SiNginx, label: "Nginx" },
-  { component: SiTailwindcss, label: "Tailwind" },
-  { component: SiTypescript, label: "Typescript" },
-  { component: TbBrandReactNative, label: "ReactNative" },
-  { component: BiLogoPostgresql, label: "Postgresql" },
-  { component: SiMysql, label: "Mysql" },
-  { component: FaNodeJs, label: "NodeJs" },
-  { component: SiK6, label: "K6" },
-  { component: SiMicrosoftazure, label: "Azure" },
-  { component: FaAws, label: "AWS" },
-  { component: SiSelenium, label: "Selenium" },
-  { component: SiPlaywright, label: "Playwright" },
-  { component: SiTerraform, label: "Terraform" },
-  { component: SiAnsible, label: "Ansible" },
-  { component: FaGit, label: "Git" },
-  { component: SiPostman, label: "Postman" },
-];
+type IconName =
+  | "React"
+  | "Javascript"
+  | "Nextjs"
+  | "Python"
+  | "Html5"
+  | "CSS3"
+  | "Supabase"
+  | "Docker"
+  | "Kubernetes"
+  | "Cloudflare"
+  | "Nginx"
+  | "Tailwind"
+  | "Typescript"
+  | "ReactNative"
+  | "Postgresql"
+  | "Mysql"
+  | "NodeJs"
+  | "K6"
+  | "Azure"
+  | "AWS"
+  | "Selenium"
+  | "Playwright"
+  | "Terraform"
+  | "Ansible"
+  | "Git"
+  | "Postman";
 
-const SkillsIcons: React.FC = () => {
+export type SkillsIconItem = { name: string; icon?: IconName | null };
+
+const iconMap: Record<IconName, ComponentType<{ className?: string }>> = {
+  React: FaReact,
+  Javascript: SiJavascript,
+  Nextjs: RiNextjsFill,
+  Python: FaPython,
+  Html5: FaHtml5,
+  CSS3: FaCss3Alt,
+  Supabase: RiSupabaseFill,
+  Docker: FaDocker,
+  Kubernetes: SiKubernetes,
+  Cloudflare: FaCloudflare,
+  Nginx: SiNginx,
+  Tailwind: SiTailwindcss,
+  Typescript: SiTypescript,
+  ReactNative: TbBrandReactNative,
+  Postgresql: BiLogoPostgresql,
+  Mysql: SiMysql,
+  NodeJs: FaNodeJs,
+  K6: SiK6,
+  Azure: SiMicrosoftazure,
+  AWS: FaAws,
+  Selenium: SiSelenium,
+  Playwright: SiPlaywright,
+  Terraform: SiTerraform,
+  Ansible: SiAnsible,
+  Git: FaGit,
+  Postman: SiPostman,
+};
+
+const defaultIcons: SkillsIconItem[] = Object.keys(iconMap).map((key) => ({
+  name: key,
+  icon: key as IconName,
+}));
+
+type Props = {
+  items?: SkillsIconItem[];
+};
+
+const SkillsIcons: React.FC<Props> = ({ items }) => {
+  const data = (items && items.length > 0 ? items : defaultIcons)
+    .map((item) => {
+      const iconKey = (item.icon || item.name) as IconName;
+      const component = iconMap[iconKey];
+      return component
+        ? {
+            component,
+            label: item.name,
+          }
+        : null;
+    })
+    .filter(Boolean) as { component: ComponentType<{ className?: string }>; label: string }[];
+
   return (
-    <div className="grid grid-cols-center-3 md:grid-cols-center-6 justify-center gap-4 p-4 md:p-8 rounded-lg bg-link shadow-lg">
-      {icons.map(({ component: Icon, label }, index) => (
+    <div className="grid grid-cols-center-3 md:grid-cols-center-6 justify-center gap-4 p-4 md:p-8 rounded-lg bg-background border border-borderPrimary shadow-sm">
+      {data.map(({ component: Icon, label }, index) => (
         <div
           key={index}
-          className="flex flex-col justify-center items-center space-y-2 transition-transform transform hover:scale-110 hover:text-hover"
+          className="flex flex-col justify-center items-center space-y-2 transition-transform transform hover:scale-105 focus-within:scale-105 focus-within:ring-2 focus-within:ring-primary rounded-md p-2"
         >
-          <Icon className="text-4xl text-resume dark:text-primary transition-colors" />
-          <span className="text-sm font-medium text-resume dark:text-primary">
+          <Icon className="text-4xl text-primary dark:text-highlight transition-colors" aria-hidden />
+          <span className="text-sm font-semibold text-foreground dark:text-active">
             {label}
           </span>
         </div>

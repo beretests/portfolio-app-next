@@ -11,6 +11,7 @@ const config: Config = {
       // backgroundImage: {
       //   "gradient-radial": "radial-gradient(circle, var(--tw-gradient-stops))",
       // },
+      // Theme colors are defined once in app/theme.css and consumed via CSS variables
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

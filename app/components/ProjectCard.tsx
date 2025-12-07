@@ -62,7 +62,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-[family-name:var(--font-cta)] bg-gray-800 text-white px-3 py-1 rounded-md text-sm font-semibold"
+              className="font-[family-name:var(--font-cta)] bg-foreground text-background hover:bg-hover transition-colors px-3 py-1 rounded-md text-sm font-semibold"
             >
               GitHub
             </a>
