@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import LoadingGrid from "../components/LoadingGrid";
+import Chip from "@mui/material/Chip";
 
 type Post = {
   slug: string;
@@ -74,6 +75,15 @@ export default function BlogPage() {
         <h1 className="text-3xl md:text-4xl font-bold text-foreground font-[family-name:var(--font-headings)] mt-2">
           Ideas on engineering, testing, and building calm products
         </h1>
+        <div className="mt-3">
+          <Chip
+            label="Work in progress"
+            size="small"
+            color="warning"
+            variant="outlined"
+            sx={{ fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.3 }}
+          />
+        </div>
         <p className="text-foreground/80 md:text-lg mt-3 max-w-3xl font-[family-name:var(--font-body)]">
           Notes from the field on automation, performance, and product delivery—all
           aligned with the same palette and typography as the rest of the site.

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import Header from "./components/Header";
 import Favicon from "./images/portfolio-logo-white.png";
 import Footer from "./components/Footer";

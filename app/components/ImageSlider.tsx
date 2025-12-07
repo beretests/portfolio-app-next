@@ -1,8 +1,13 @@
+// components/ImageSlider.tsx
+"use client";
+
 import React from "react";
-import Slider from "react-slick";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import SliderArrow from "./SliderArrow";
+
+const SlickSlider = dynamic(() => import("react-slick"), { ssr: false });
 
 interface ImageSliderProps {
   images: string[];
@@ -16,32 +21,35 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   isZoomed,
 }) => {
   const settings = {
-    // dots: true,
+    dots: true,
     infinite: true,
-    speed: 1000,
+    speed: 750,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
-    // nextArrow: <SliderArrow direction="next" onClick={() => {}} />,
-    // prevArrow: <SliderArrow direction="prev" onClick={() => {}} />,
     autoplay: true,
     autoplaySpeed: 3000,
   };
 
   return (
-    <Slider {...settings}>
-      {(images as unknown as string[]).map((image: string, index: number) => (
-        <div key={index} onClick={onImageClick} className="cursor-pointer">
-          <img
-            src={image}
-            alt={`Slide ${index + 1}`}
-            className={`w-full h-auto ${
-              isZoomed ? "max-h-screen" : "max-h-48"
-            } object-contain`}
-          />
-        </div>
-      ))}
-    </Slider>
+    <div className="h-full">
+      <SlickSlider {...settings}>
+        {images.map((image, index) => (
+          <div key={index} onClick={onImageClick} className="cursor-pointer h-full flex items-center justify-center">
+            <div className="relative w-full" style={{ aspectRatio: "16 / 9", maxHeight: 300 }}>
+              <Image
+                src={image}
+                alt={`Slide ${index + 1}`}
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-contain rounded-md"
+                priority={index === 0}
+              />
+            </div>
+          </div>
+        ))}
+      </SlickSlider>
+    </div>
   );
 };
 

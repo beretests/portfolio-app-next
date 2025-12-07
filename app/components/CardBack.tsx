@@ -6,7 +6,7 @@ interface CardBackProps {
 
 const CardBack: React.FC<CardBackProps> = ({ images }) => {
   return (
-    <div className="w-full h-full bg-primary shadow-lg rounded-lg p-6">
+    <div className="w-full h-full bg-primary shadow-lg rounded-lg p-6 overflow-hidden">
       <ImageSlider images={images} />
     </div>
   );
