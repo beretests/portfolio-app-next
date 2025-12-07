@@ -75,9 +75,9 @@ export async function POST(req: NextRequest) {
   // Deterministic visitor id to de-duplicate the same user quickly
   const visitorId = await hashFingerprint(`${ip}|${userAgent}`);
 
-  // Use built-in geo data when available (no extra network call)
-  const country = req.geo?.country || null;
-  const city = req.geo?.city || null;
+  // Use built-in geo data when available (no extra network call). Not typed on NextRequest in some runtimes.
+  const country = (req as any).geo?.country || null;
+  const city = (req as any).geo?.city || null;
 
   const visitorData = {
     visitor_id: visitorId,
