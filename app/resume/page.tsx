@@ -1,4 +1,4 @@
-import SkillsIcons from "../components/SkillsIcon";
+import SkillsIcons, { iconNames, type IconName, type SkillsIconItem } from "../components/SkillsIcon";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 type WorkItem = { role: string; company: string; dates: string; bullets: string[] };
@@ -92,8 +92,12 @@ export default async function ResumePage() {
   const education = ((content?.education as EducationItem[]) || fallback.education) as EducationItem[];
   const skills = (content?.skills as string[]) || fallback.skills;
   const certifications = ((content?.certifications as CertificationItem[]) || fallback.certifications) as CertificationItem[];
-  const languages = ((content?.languages_frameworks as LangFramework[]) || fallback.languages_frameworks).map(
-    (l) => ({ ...l, icon: l.icon ?? null })
+  const allowedIcons = new Set<IconName>(iconNames);
+  const languages: SkillsIconItem[] = ((content?.languages_frameworks as LangFramework[]) || fallback.languages_frameworks).map(
+    (l) => ({
+      name: l.name,
+      icon: typeof l.icon === "string" && allowedIcons.has(l.icon as IconName) ? (l.icon as IconName) : null,
+    })
   );
 
   const hasContent =
