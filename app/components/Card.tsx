@@ -17,7 +17,7 @@ const Card: React.FC<CardProps> = ({ title, body, images }) => {
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 relative">
       <motion.div
         className="w-full h-64 cursor-pointer"
         onClick={handleClick}
