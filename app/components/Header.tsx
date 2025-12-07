@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
@@ -20,6 +20,34 @@ interface NavLinkProps {
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const pathname = usePathname();
+
+  // useEffect(() => {
+  //   // Presence of admin-auth cookie is enough to show the link (auth is still enforced by middleware)
+  //   const hasAdminCookie = document.cookie
+  //     .split("; ")
+  //     .some((c) => c.startsWith("admin-auth="));
+  //   setIsAdmin(hasAdminCookie);
+  // }, [pathname]);
+
+  useEffect(() => {
+    async function checkAdmin() {
+      try {
+        const res = await fetch("/api/me", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await res.json();
+        setIsAdmin(data.isAdmin);
+      } catch (err) {
+        console.error("Failed to check admin", err);
+      }
+    }
+
+    checkAdmin();
+  }, [pathname]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -56,6 +84,7 @@ const Header: React.FC = () => {
           <NavLink href="/resume">Resume</NavLink>
           <NavLink href="/projects">Projects</NavLink>
           <NavLink href="/blog">Blog</NavLink>
+          {isAdmin && <NavLink href="/admin">Admin</NavLink>}
         </nav>
 
         <div className="flex items-center">
@@ -89,6 +118,11 @@ const Header: React.FC = () => {
           <NavLink href="/blog" onClick={toggleMenu}>
             Blog
           </NavLink>
+          {isAdmin && (
+            <NavLink href="/admin" onClick={toggleMenu}>
+              Admin
+            </NavLink>
+          )}
           <div className="py-2">
             <ThemeToggle />
           </div>
@@ -98,19 +132,6 @@ const Header: React.FC = () => {
   );
 };
 
-// const NavLink: React.FC<{
-//   href: string;
-//   children: React.ReactNode;
-//   onClick?: () => void;
-// }> = ({ href, children, onClick }) => (
-//   <Link
-//     href={href}
-//     className="block py-2 px-5 text-primary text-lg font-semibold hover:bg-hover transition duration-300"
-//     onClick={onClick}
-//   >
-//     {children}
-//   </Link>
-// );
 const NavLink: React.FC<NavLinkProps> = ({
   href,
   exact = false,

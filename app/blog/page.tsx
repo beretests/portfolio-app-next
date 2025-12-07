@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import LoadingGrid from "../components/LoadingGrid";
 
 type Post = {
   slug: string;
@@ -100,9 +101,7 @@ export default function BlogPage() {
       </div>
 
       {loading && (
-        <p className="text-foreground/70 font-[family-name:var(--font-body)]">
-          Loading posts...
-        </p>
+        <LoadingGrid />
       )}
 
       {error && (

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Markdown from "markdown-to-jsx";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 export default function BlogEditorPage() {
   const [slug, setSlug] = useState("");
@@ -11,24 +13,41 @@ export default function BlogEditorPage() {
   const [image, setImage] = useState("");
   const [date, setDate] = useState("");
   const [body, setBody] = useState("");
-  const [status, setStatus] = useState<{ message: string; kind: "success" | "error" | "info" } | null>(null);
-  const [signOutStatus, setSignOutStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState<{
+    message: string;
+    kind: "success" | "error" | "info";
+  } | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus({ message: "Saving...", kind: "info" });
+    setSnackbarOpen(true);
     const res = await fetch("/api/blog/admin/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug, title, description, tag, image, date, body }),
+      body: JSON.stringify({
+        slug,
+        title,
+        description,
+        tag,
+        image,
+        date,
+        body,
+      }),
     });
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));
-      setStatus({ message: json.error || "Failed to save post", kind: "error" });
+      setStatus({
+        message: json.error || "Failed to save post",
+        kind: "error",
+      });
+      setSnackbarOpen(true);
       return;
     }
     setStatus({ message: "Saved!", kind: "success" });
+    setSnackbarOpen(true);
     setSlug("");
     setTitle("");
     setDescription("");
@@ -38,25 +57,12 @@ export default function BlogEditorPage() {
     setBody("");
   };
 
-  const handleSignOut = async () => {
-    setSignOutStatus("Signing out...");
-    const res = await fetch("/api/blog/admin/logout", { method: "POST" });
-    if (!res.ok) {
-      setSignOutStatus("Failed to sign out");
-      return;
-    }
-    setSignOutStatus("Signed out");
-    // Redirect to sign-in after a short delay
-    setTimeout(() => {
-      window.location.href = "/blog/admin/sign-in";
-    }, 500);
-  };
-
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
     setStatus({ message: "Uploading image...", kind: "info" });
+    setSnackbarOpen(true);
     const formData = new FormData();
     formData.append("file", file);
 
@@ -67,15 +73,22 @@ export default function BlogEditorPage() {
 
     const json = await res.json().catch(() => ({}));
     if (!res.ok) {
-      setStatus({ message: json.error || "Image upload failed", kind: "error" });
+      setStatus({
+        message: json.error || "Image upload failed",
+        kind: "error",
+      });
+      setSnackbarOpen(true);
       setUploading(false);
       return;
     }
 
     setImage(json.publicUrl);
     setStatus({ message: "Image uploaded and URL set", kind: "success" });
+    setSnackbarOpen(true);
     setUploading(false);
   };
+
+  const handleSnackbarClose = () => setSnackbarOpen(false);
 
   return (
     <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10 grid gap-8 lg:grid-cols-2">
@@ -87,13 +100,6 @@ export default function BlogEditorPage() {
           >
             ← Back to blog
           </a>
-          <button
-            type="button"
-            onClick={handleSignOut}
-            className="rounded bg-foreground text-background px-3 py-2 text-sm font-semibold hover:opacity-90 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary focus-visible:ring-offset-background"
-          >
-            Sign out
-          </button>
         </div>
       </div>
       <form
@@ -201,18 +207,21 @@ export default function BlogEditorPage() {
           Save Post
         </button>
         {status && (
-          <div
-            className={`text-sm font-[family-name:var(--font-body)] rounded-md px-3 py-2 border ${
-              status.kind === "success"
-                ? "bg-success/15 text-success border-success/40"
-                : status.kind === "error"
-                ? "bg-error/15 text-error border-error/40"
-                : "bg-secondary text-foreground border-borderSecondary"
-            }`}
-            role="status"
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={handleSnackbarClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           >
-            {status.message}
-          </div>
+            <MuiAlert
+              onClose={handleSnackbarClose}
+              severity={status.kind}
+              variant="filled"
+              sx={{ width: "100%" }}
+            >
+              {status.message}
+            </MuiAlert>
+          </Snackbar>
         )}
       </form>
 
@@ -223,11 +232,6 @@ export default function BlogEditorPage() {
         <div className="prose prose-sm max-w-none text-foreground">
           <Markdown>{body || "_Start typing markdown to preview…_"}</Markdown>
         </div>
-        {signOutStatus && (
-          <p className="text-sm text-foreground/80 font-[family-name:var(--font-body)] mt-4">
-            {signOutStatus}
-          </p>
-        )}
       </div>
     </div>
   );

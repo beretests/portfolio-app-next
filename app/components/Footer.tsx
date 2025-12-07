@@ -14,7 +14,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col sm:flex-row justify-between items-center">
           <p className="mb-4 sm:mb-0 text-primary">
-            &copy; 2024 Beretests. All rights reserved.
+            &copy; {new Date().getFullYear()} Beretests. All rights reserved.
           </p>
           <div className="flex justify-center sm:justify-end space-x-4 w-full sm:w-auto">
             <Link

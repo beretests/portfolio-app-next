@@ -6,13 +6,18 @@ const ADMIN_PATHS = [
   "/api/blog/admin/create",
   "/api/blog/admin/update",
   "/api/blog/admin/delete",
+  "/api/about/admin/upload",
+  "/admin",
+  "/api/resume/admin/upload",
+  "/api/resume/admin/save",
+  "/api/resume/admin/content",
 ];
 
 function unauthorized() {
   return new NextResponse("Unauthorized", { status: 401 });
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow the login page and login API without auth
@@ -73,6 +78,9 @@ export const config = {
   matcher: [
     "/blog/editor/:path*",
     "/api/blog/admin/:path*",
+    "/api/about/admin/:path*",
+    "/api/resume/admin/:path*",
+    "/admin",
     "/blog/admin/sign-in",
   ],
 };

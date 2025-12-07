@@ -2,17 +2,23 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 export default function AdminSignInPage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<string | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info">("info");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("Signing in...");
+    setSnackbarSeverity("info");
+    setSnackbarOpen(true);
     const res = await fetch("/api/blog/admin/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -21,11 +27,17 @@ export default function AdminSignInPage() {
     const json = await res.json().catch(() => ({}));
     if (!res.ok) {
       setStatus(json.error || "Login failed");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       return;
     }
     setStatus("Signed in");
+    setSnackbarSeverity("success");
+    setSnackbarOpen(true);
     router.push("/blog/editor");
   };
+
+  const handleClose = () => setSnackbarOpen(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-secondary/50 to-background flex items-center justify-center px-4">
@@ -85,9 +97,16 @@ export default function AdminSignInPage() {
             Sign in
           </button>
           {status && (
-            <p className="text-sm text-center text-foreground/80 font-[family-name:var(--font-body)]">
-              {status}
-            </p>
+            <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleClose}>
+              <MuiAlert
+                onClose={handleClose}
+                severity={snackbarSeverity}
+                variant="filled"
+                sx={{ width: "100%" }}
+              >
+                {status}
+              </MuiAlert>
+            </Snackbar>
           )}
         </form>
       </div>
