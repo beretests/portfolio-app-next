@@ -29,7 +29,7 @@ export default function AdminDashboardPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 pr-6 space-y-6 min-h-screen">
+    <div className="max-w-6xl mx-auto px-4 py-8 space-y-6 min-h-screen">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="uppercase text-xs tracking-wide text-foreground/70 font-[family-name:var(--font-cta)]">

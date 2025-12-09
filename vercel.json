@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/internal/keepalive",
+      "path": "/api/keepalive",
       "schedule": "0 7 * * 1"
     }
   ]
