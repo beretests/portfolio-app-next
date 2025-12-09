@@ -21,12 +21,15 @@ export default function AdminDashboardPage() {
 
   const handleSignOut = async () => {
     setSigningOut(true);
-    await fetch("/api/blog/admin/logout", { method: "POST", credentials: "include" }).catch(() => {});
+    await fetch("/api/blog/admin/logout", {
+      method: "POST",
+      credentials: "include",
+    }).catch(() => {});
     window.location.href = "/blog/admin/sign-in";
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-6 min-h-screen">
+    <div className="max-w-6xl mx-auto px-4 py-8 pr-6 space-y-6 min-h-screen">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="uppercase text-xs tracking-wide text-foreground/70 font-[family-name:var(--font-cta)]">
