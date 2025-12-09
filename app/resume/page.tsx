@@ -1,8 +1,22 @@
-import SkillsIcons, { iconNames, type IconName, type SkillsIconItem } from "../components/SkillsIcon";
+import SkillsIcons, {
+  iconNames,
+  type IconName,
+  type SkillsIconItem,
+} from "../components/SkillsIcon";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
-type WorkItem = { role: string; company: string; dates: string; bullets: string[] };
-type EducationItem = { school: string; degree: string; dates: string; details?: string };
+type WorkItem = {
+  role: string;
+  company: string;
+  dates: string;
+  bullets: string[];
+};
+type EducationItem = {
+  school: string;
+  degree: string;
+  dates: string;
+  details?: string;
+};
 type CertificationItem = { name: string; issuer?: string; date?: string };
 type LangFramework = { name: string; icon?: string | null };
 
@@ -44,11 +58,32 @@ const fallback = {
     },
   ],
   education: [
-    { school: "University of Nigeria, Nsukka", degree: "Bachelors in Electrical Engineering", dates: "" },
-    { school: "BrainStation", degree: "Diploma in Software Engineering", dates: "" },
+    {
+      school: "University of Nigeria, Nsukka",
+      degree: "Bachelors in Electrical Engineering",
+      dates: "",
+    },
+    {
+      school: "BrainStation",
+      degree: "Diploma in Software Engineering",
+      dates: "",
+    },
   ],
-  skills: ["Playwright", "TypeScript", "Next.js", "React", "Supabase", "Docker", "Nginx", "GitLab CI", "k6", "AWS"],
-  certifications: [{ name: "Azure Fundamentals", issuer: "Microsoft", date: "Dec 2023" }],
+  skills: [
+    "Playwright",
+    "TypeScript",
+    "Next.js",
+    "React",
+    "Supabase",
+    "Docker",
+    "Nginx",
+    "GitLab CI",
+    "k6",
+    "AWS",
+  ],
+  certifications: [
+    { name: "Azure Fundamentals", issuer: "Microsoft", date: "Dec 2023" },
+  ],
   languages_frameworks: [
     { name: "React", icon: "React" },
     { name: "Javascript", icon: "Javascript" },
@@ -82,23 +117,31 @@ const fallback = {
 export default async function ResumePage() {
   const { data: content } = await supabaseAdmin
     .from("resume_content")
-    .select("headline,summary,work,education,skills,certifications,languages_frameworks")
+    .select(
+      "headline,summary,work,education,skills,certifications,languages_frameworks"
+    )
     .eq("id", "primary")
     .single();
 
   const headline = content?.headline || fallback.headline;
   const summary = content?.summary || fallback.summary;
   const work = ((content?.work as WorkItem[]) || fallback.work) as WorkItem[];
-  const education = ((content?.education as EducationItem[]) || fallback.education) as EducationItem[];
+  const education = ((content?.education as EducationItem[]) ||
+    fallback.education) as EducationItem[];
   const skills = (content?.skills as string[]) || fallback.skills;
-  const certifications = ((content?.certifications as CertificationItem[]) || fallback.certifications) as CertificationItem[];
+  const certifications = ((content?.certifications as CertificationItem[]) ||
+    fallback.certifications) as CertificationItem[];
   const allowedIcons = new Set<IconName>(iconNames);
-  const languages: SkillsIconItem[] = ((content?.languages_frameworks as LangFramework[]) || fallback.languages_frameworks).map(
-    (l) => ({
-      name: l.name,
-      icon: typeof l.icon === "string" && allowedIcons.has(l.icon as IconName) ? (l.icon as IconName) : null,
-    })
-  );
+  const languages: SkillsIconItem[] = (
+    (content?.languages_frameworks as LangFramework[]) ||
+    fallback.languages_frameworks
+  ).map((l) => ({
+    name: l.name,
+    icon:
+      typeof l.icon === "string" && allowedIcons.has(l.icon as IconName)
+        ? (l.icon as IconName)
+        : null,
+  }));
 
   const hasContent =
     Boolean(summary) ||
@@ -118,7 +161,9 @@ export default async function ResumePage() {
           {headline}
         </p>
         {summary && (
-          <p className="text-foreground/80 font-[family-name:var(--font-body)]">{summary}</p>
+          <p className="text-foreground/80 font-[family-name:var(--font-body)]">
+            {summary}
+          </p>
         )}
       </header>
 
@@ -126,6 +171,68 @@ export default async function ResumePage() {
         <p className="text-foreground/70 font-[family-name:var(--font-body)]">
           Resume content is being updated.
         </p>
+      )}
+
+      {skills.length > 0 && (
+        <section className="rounded-xl border border-borderSecondary bg-background/60 p-4 sm:p-5 shadow-sm space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-[family-name:var(--font-headings)] font-semibold">
+                Skills
+              </h2>
+            </div>
+          </div>
+          <div className="h-px bg-borderSecondary/60" />
+          <div className="grid md:grid-cols-center-3 font-[family-name:var(--font-body)] gap-2 md:text-lg">
+            {skills.map((skill, index) => (
+              <div
+                key={index}
+                className="rounded-md p-2 text-center bg-borderSecondary/50 text-foreground"
+              >
+                {skill}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {certifications.length > 0 && (
+        <section className="rounded-xl border border-borderSecondary bg-background/60 p-4 sm:p-5 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
+            <h2 className="text-2xl font-[family-name:var(--font-headings)] font-semibold">
+              Certifications
+            </h2>
+            <span className="inline-flex items-center rounded-full border border-borderSecondary bg-secondary/20 px-3 py-1 text-xs font-semibold text-foreground">
+              {certifications.length} credential
+              {certifications.length > 1 ? "s" : ""}
+            </span>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {certifications.map((cert, idx) => (
+              <div
+                key={idx}
+                className="rounded-lg border border-borderSecondary bg-background p-3 space-y-1"
+              >
+                <p className="text-sm uppercase text-foreground/70 font-semibold">
+                  Certification
+                </p>
+                <p className="text-lg font-[family-name:var(--font-headings)] text-primary">
+                  {cert.name}
+                </p>
+                {cert.issuer && (
+                  <p className="text-sm text-foreground/80">
+                    Issued by {cert.issuer}
+                  </p>
+                )}
+                {cert.date && (
+                  <p className="text-xs text-foreground/70">
+                    Date: {cert.date}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       {work.length > 0 && (
@@ -181,44 +288,18 @@ export default async function ResumePage() {
         </section>
       )}
 
-      {skills.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-[family-name:var(--font-headings)] font-semibold mb-4">
-            Skills
-          </h2>
-          <div className="grid md:grid-cols-center-3 font-[family-name:var(--font-body)] gap-2 md:text-lg">
-            {skills.map((skill, index) => (
-              <div key={index} className="rounded-md p-2 text-center">
-                {skill}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
       {languages.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-[family-name:var(--font-headings)] font-semibold mb-4">
-            Languages & Frameworks
-          </h2>
+        <section className="rounded-xl border border-borderSecondary bg-background/60 p-4 sm:p-5 shadow-sm space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h2 className="text-2xl font-[family-name:var(--font-headings)] font-semibold">
+              Languages & Frameworks
+            </h2>
+            <span className="inline-flex items-center rounded-full border border-borderSecondary bg-secondary/20 px-3 py-1 text-xs font-semibold text-foreground">
+              {languages.length} stack items
+            </span>
+          </div>
+          <div className="h-px bg-borderSecondary/60" />
           <SkillsIcons items={languages} />
-        </section>
-      )}
-
-      {certifications.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-[family-name:var(--font-headings)] font-semibold mb-4">
-            Certifications
-          </h2>
-          <ul className="list-disc pl-6 font-[family-name:var(--font-body)]">
-            {certifications.map((cert, idx) => (
-              <li key={idx}>
-                {cert.name}
-                {cert.issuer ? `, ${cert.issuer}` : ""}
-                {cert.date ? ` (${cert.date})` : ""}
-              </li>
-            ))}
-          </ul>
         </section>
       )}
     </div>
