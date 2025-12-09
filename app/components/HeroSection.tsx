@@ -23,7 +23,7 @@ const HeroSection = () => {
         Hi! I'm
         <br />
       </span>
-      <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold pt-12 text-primary text-center font-[family-name:var(--font-special)]">
+      <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold pt-12 text-primary text-center font-[family-name:var(--font-special)] drop-shadow-[0_0_12px_rgba(255,105,180,0.6)]">
         Eberechi Omeje
       </h1>
       <ScrollingText texts={roles} interval={100} />
