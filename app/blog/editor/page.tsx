@@ -104,7 +104,7 @@ export default function BlogEditorPage() {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 rounded-xl border border-borderSecondary bg-background p-4 sm:p-6 shadow-sm"
+        className="space-y-4 rounded-xl border border-borderSecondary bg-background p-4 sm:p-6 sm:mr-2 shadow-sm"
       >
         <div>
           <label className="block text-sm font-semibold text-foreground mb-1">
@@ -193,12 +193,12 @@ export default function BlogEditorPage() {
             Body (Markdown)
           </label>
           <textarea
-          className="w-full rounded border border-borderSecondary bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary font-mono min-h-[200px]"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          rows={12}
-          required
-        />
+            className="w-full rounded border border-borderSecondary bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary font-mono min-h-[200px]"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            rows={12}
+            required
+          />
         </div>
         <button
           type="submit"
