@@ -91,7 +91,7 @@ export default function BlogEditorPage() {
   const handleSnackbarClose = () => setSnackbarOpen(false);
 
   return (
-    <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-10 grid gap-6 lg:gap-8 lg:grid-cols-2">
+    <div className="max-w-6xl mx-auto px-3 sm:pl-4 sm:pr-6 lg:px-8 py-8 sm:py-10 grid gap-6 lg:gap-8 lg:grid-cols-2">
       <div className="lg:col-span-2 flex justify-end">
         <div className="flex items-center gap-3">
           <a

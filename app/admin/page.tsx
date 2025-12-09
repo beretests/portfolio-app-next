@@ -21,7 +21,10 @@ export default function AdminDashboardPage() {
 
   const handleSignOut = async () => {
     setSigningOut(true);
-    await fetch("/api/blog/admin/logout", { method: "POST", credentials: "include" }).catch(() => {});
+    await fetch("/api/blog/admin/logout", {
+      method: "POST",
+      credentials: "include",
+    }).catch(() => {});
     window.location.href = "/blog/admin/sign-in";
   };
 
