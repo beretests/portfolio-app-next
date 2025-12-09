@@ -23,7 +23,9 @@ const About: React.FC = () => {
   });
   const [status, setStatus] = useState<string | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info">("info");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "info"
+  >("info");
   const [isAdmin, setIsAdmin] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [selectedCarousel, setSelectedCarousel] =
@@ -235,7 +237,7 @@ const About: React.FC = () => {
                 key={card.id}
                 title={card.title}
                 body={card.body}
-                images={card.images} // each card has its own images
+                images={card.images}
               />
             ))}
           </div>

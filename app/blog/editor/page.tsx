@@ -91,12 +91,12 @@ export default function BlogEditorPage() {
   const handleSnackbarClose = () => setSnackbarOpen(false);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 lg:px-8 py-10 grid gap-8 lg:grid-cols-2">
+    <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-10 grid gap-6 lg:gap-8 lg:grid-cols-2">
       <div className="lg:col-span-2 flex justify-end">
         <div className="flex items-center gap-3">
           <a
             href="/blog"
-            className="rounded border border-borderSecondary bg-background px-3 py-2 text-sm font-semibold text-foreground hover:bg-hover transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary focus-visible:ring-offset-background"
+            className="rounded border border-borderSecondary bg-background px-3 py-2 text-sm font-semibold text-foreground hover:bg-hover transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary focus-visible:ring-offset-background whitespace-nowrap"
           >
             ← Back to blog
           </a>
@@ -104,7 +104,7 @@ export default function BlogEditorPage() {
       </div>
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 rounded-xl border border-borderSecondary bg-background p-6 shadow-sm"
+        className="space-y-4 rounded-xl border border-borderSecondary bg-background p-4 sm:p-6 shadow-sm"
       >
         <div>
           <label className="block text-sm font-semibold text-foreground mb-1">
@@ -140,7 +140,7 @@ export default function BlogEditorPage() {
             required
           />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-foreground mb-1">
               Tag
@@ -193,12 +193,12 @@ export default function BlogEditorPage() {
             Body (Markdown)
           </label>
           <textarea
-            className="w-full rounded border border-borderSecondary bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary font-mono"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            rows={12}
-            required
-          />
+          className="w-full rounded border border-borderSecondary bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-primary font-mono min-h-[200px]"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          rows={12}
+          required
+        />
         </div>
         <button
           type="submit"

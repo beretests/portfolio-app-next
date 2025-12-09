@@ -19,7 +19,7 @@ const Card: React.FC<CardProps> = ({ title, body, images }) => {
   return (
     <div className="w-full p-4 relative">
       <motion.div
-        className="w-full h-64 cursor-pointer"
+        className="relative w-full aspect-video cursor-pointer"
         onClick={handleClick}
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6 }}
