@@ -32,11 +32,18 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   };
 
   return (
-    <div className="h-full">
+    <div className="h-full [&_.slick-dots]:!-bottom-4 [&_.slick-dots>li>button:before]:text-xs [&_.slick-dots>li>button:before]:text-foreground/70">
       <SlickSlider {...settings}>
         {images.map((image, index) => (
-          <div key={index} onClick={onImageClick} className="cursor-pointer h-full flex items-center justify-center">
-            <div className="relative w-full" style={{ aspectRatio: "16 / 9", maxHeight: 300 }}>
+          <div
+            key={index}
+            onClick={onImageClick}
+            className="cursor-pointer h-full flex items-center justify-center"
+          >
+            <div
+              className="relative w-full pb-8"
+              style={{ aspectRatio: "16 / 9" }}
+            >
               <Image
                 src={image}
                 alt={`Slide ${index + 1}`}
