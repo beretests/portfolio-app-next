@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eberechi Omeje — Engineering Portfolio
 
-## Getting Started
+Portfolio website for Eberechi Omeje, presenting selected work across Power
+Platform engineering, Microsoft Azure solutions architecture and full-stack
+software engineering.
 
-First, run the development server:
+## Portfolio structure
+
+- **Home**: professional positioning and the three connected engineering focus
+  areas.
+- **Projects**: featured case studies plus smaller supporting projects.
+- **Project case studies**: problem, role, outcomes, architecture decisions,
+  challenges and learnings.
+- **Resume**: experience, education, skills and certifications.
+- **About**: professional background and personal interests.
+- **Blog**: longer-form technical writing.
+
+Professional case studies are deliberately anonymized. Organization names,
+tenant identifiers, private code, internal screenshots and security-sensitive
+configuration are not published.
+
+## Tech stack
+
+- Next.js App Router
+- React and TypeScript
+- Tailwind CSS and Material UI
+- Supabase for blog, resume and administrator-backed content
+- Cloudflare Pages deployment tooling
+
+Project case-study content is versioned in `data/projects.ts`. This keeps public
+portfolio claims reviewable through Git history and prevents runtime content
+from silently overriding the approved case-study copy.
+
+## Local development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Some Supabase-backed features require the environment values used by the
+deployed site. The homepage and project case studies use source-controlled data
+and can be reviewed without Supabase credentials.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Validation
 
-## Learn More
+Generate Next.js route types and run TypeScript checks:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run typecheck
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a production build:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build
+```
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The repository contains Cloudflare Pages tooling:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run pages:build
+npm run preview
+npm run deploy
+```
+
+Deployment environment variables and credentials must be configured in the
+hosting platform. Never commit `.env` files, Supabase keys or administrator
+credentials.
+
+## Updating project content
+
+1. Add or update a project in `data/projects.ts`.
+2. Use only supportable claims and measurements.
+3. Anonymize professional projects before committing.
+4. Add public source or demo links only when they are safe to share.
+5. Run `npm run typecheck` and `npm run build`.
+6. Submit the change through a pull request.

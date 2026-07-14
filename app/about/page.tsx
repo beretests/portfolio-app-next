@@ -153,21 +153,25 @@ const About: React.FC = () => {
         About Me
       </h1>
       <p className="md:text-lg max-w-2xl text-justify font-[family-name:var(--font-body)]">
-        I'm a software engineer with an eclectic experience in software
-        development, software testing, system administration and technical
-        support. I'm highly adaptable - whether it's switching from software
-        testing to software engineering and back, learning new technologies like
-        TypeScript and Supabase on the fly, or applying my problem-solving
-        skills across various roles and industries, I consistently show
-        resilience and a capacity to pivot quickly. I also have a keen interest
-        in the infrastructure side of things, as I've solved problems with
-        deploying applications with Nginx, Docker, Heroku and Cloudflare.
+        I&apos;m a Power Platform engineer, Microsoft Azure solutions architect
+        and full-stack software engineer who enjoys turning complex requirements
+        into secure, understandable systems. My work spans Power Platform
+        governance and ALM, Dataverse and Azure integrations, Microsoft 365
+        administration tools, and user-facing web applications.
       </p>
       <p className="md:text-lg max-w-2xl text-justify mt-4 font-[family-name:var(--font-body)]">
-        My blend of support experience, QA testing, and full-stack development
-        uniquely positions me as a bridge between technical teams. I have the
-        potential to excel in roles that require cross-functional collaboration,
-        from development to infrastructure management and testing.
+        My earlier experience in QA, DevOps, systems administration and technical
+        support shapes how I engineer today. I consider the people using a
+        solution, the administrators governing it, and the developers who will
+        maintain it. That cross-functional perspective helps me connect
+        architecture, implementation, testing and reliable delivery instead of
+        treating them as separate concerns.
+      </p>
+      <p className="md:text-lg max-w-2xl text-justify mt-4 font-[family-name:var(--font-body)]">
+        I&apos;m especially interested in Microsoft-platform work that combines
+        thoughtful governance with practical automation—and in full-stack
+        products where strong data modelling, accessible UX and dependable
+        operations matter equally.
       </p>
 
       <div className="w-full mt-8 p-8">

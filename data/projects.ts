@@ -1,202 +1,466 @@
+export type ProjectStatus = "Live" | "Completed" | "Professional case study";
+
+export type ProjectCategory =
+  | "Power Platform"
+  | "Azure & Microsoft 365"
+  | "Full-Stack Engineering";
+
 export type Project = {
   id: string;
   name: string;
-  status: "Live" | "WIP" | "Not Started";
-  gifUrl: string;
+  shortName: string;
+  status: ProjectStatus;
+  category: ProjectCategory;
+  role: string;
+  projectType: "Public project" | "Professional project";
+  featured: boolean;
+  imageUrl?: string;
+  imagePosition?: string;
   liveUrl?: string;
+  liveLabel?: string;
   githubUrl?: string;
   overview: string;
+  outcomes: string[];
   goals: string[];
   designDecisions: string[];
   techStack: string[];
   challenges: { title: string; solution: string }[];
   learnings: string[];
+  confidentialityNote?: string;
 };
 
 export const projects: Project[] = [
   {
-    id: "d128fb21-4477-4126-b47b-cfebacad9e94",
-    name: "Church Choir Repertoire Management App",
-    status: "Live",
-    gifUrl:
-      "https://res.cloudinary.com/dsspeyssh/image/upload/t_Thumbnail/v1731782768/portfolio-logo-darkblue_tp7pao.png",
-    liveUrl: "https://ctk-songs.beretesting.com/",
-    githubUrl: "https://github.com/beretests/choir-repertoire",
+    id: "power-platform-architect-agent",
+    name: "Power Platform Architect Agent",
+    shortName: "Architect Agent",
+    status: "Completed",
+    category: "Power Platform",
+    role: "Solution architect and full-stack engineer",
+    projectType: "Public project",
+    featured: true,
+    imageUrl:
+      "https://raw.githubusercontent.com/beretests/Power-Platform-Solution-Architect-Agent/main/docs/screenshots/03-overview-readiness.png",
+    imagePosition: "top",
+    liveUrl:
+      "https://player.vimeo.com/progressive_redirect/playback/1201434141/rendition/720p/file.mp4%20%28720p%29.mp4?loc=external&signature=97130b8bab10b858ef2e9bde89f33b1d9905277bb1c10f259eda8aa1f24d2228",
+    liveLabel: "Watch demo",
+    githubUrl:
+      "https://github.com/beretests/Power-Platform-Solution-Architect-Agent",
     overview:
-      "Built a repertoire manager for a church choir so members can access songs, recordings, and notes on any device. Used it to practice Next.js App Router, TypeScript, and Supabase for real-time data.",
+      "Designed and built an AI-assisted architecture workspace that converts Power Platform requirements and existing designs into structured solution blueprints, review findings, readiness scores and implementation guidance.",
+    outcomes: [
+      "Produces consistent architecture outputs covering Dataverse, Power Automate, security, ALM and risk",
+      "Makes grounding sources and AI limitations visible to reviewers",
+      "Exports implementation-ready Markdown, JSON and Mermaid artifacts",
+    ],
     goals: [
-      "Centralize songs/recordings with easy access for choir members",
-      "Streamline upload/distribution of recordings",
-      "Practice modern Next.js (App Router) with TypeScript + Supabase",
+      "Accelerate early Power Platform architecture and design reviews",
+      "Surface governance, security and production-readiness gaps before delivery",
+      "Provide predictable, reviewable outputs instead of unstructured AI responses",
     ],
     designDecisions: [
-      "Responsive UI with Tailwind for quick iteration across devices",
-      "Hierarchical navigation (year → month → date → songs → recordings)",
-      "Built-in audio player for browser playback",
-      "Supabase for storage and database to simplify real-time updates",
+      "Used Azure OpenAI structured output with Zod validation for predictable rendering",
+      "Grounded responses with Foundry IQ and Azure AI Search, with curated local guidance as a fallback",
+      "Separated architecture generation and Solution Review Board modes",
+      "Included source transparency, responsible-AI notices and a clearly labelled demo mode",
     ],
-    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase", "React Audio Player", "SWR"],
+    techStack: [
+      "Power Platform",
+      "Next.js",
+      "TypeScript",
+      "Azure OpenAI",
+      "Foundry IQ",
+      "Azure AI Search",
+      "Zod",
+      "Mermaid",
+    ],
     challenges: [
       {
-        title: "Handling large sets of recordings",
+        title: "Reliable AI output",
         solution:
-          "Optimized Supabase queries and paging, cached with SWR, and tuned audio loading to avoid blocking the UI.",
+          "Defined strict architecture and review schemas, requested JSON-schema output and validated every response before rendering it.",
       },
       {
-        title: "Keeping navigation state predictable",
+        title: "Trustworthy grounding",
         solution:
-          "Modeled the hierarchy in the DB and UI to mirror each other; added guards and defaults to reduce 404s and dead-ends.",
+          "Added Foundry IQ retrieval, local knowledge fallback and visible grounding metadata so users can distinguish sourced guidance from demo data.",
       },
     ],
     learnings: [
-      "App Router patterns for data fetching and caching with SWR",
-      "Structuring hierarchical data for predictable navigation",
-      "Tuning Supabase storage/DB for media-heavy workloads",
+      "Designing AI features around human review rather than automatic approval",
+      "Combining retrieval grounding with structured outputs for enterprise use cases",
+      "Translating Power Platform governance standards into reusable architecture checks",
     ],
   },
   {
-    id: "db8d898d-5c9a-435d-84f4-c049417e5f49",
-    name: "LeetCode Daily Challenge Discord Bot",
+    id: "m365-governance-platform",
+    name: "Microsoft 365 Governance & Access Review Platform",
+    shortName: "M365 Governance",
+    status: "Professional case study",
+    category: "Azure & Microsoft 365",
+    role: "Platform engineer and solution designer",
+    projectType: "Professional project",
+    featured: true,
+    overview:
+      "Designed an administration platform that brings Teams and SharePoint inventory, governance indicators, reports and access reviews into one Teams-aware experience for administrators.",
+    outcomes: [
+      "Centralizes visibility into Teams and SharePoint ownership, membership and governance risks",
+      "Supports owner-led access review decisions with auditable records",
+      "Reduces the need for administrators to assemble governance information manually across tools",
+    ],
+    goals: [
+      "Identify Teams and sites with low or missing ownership and membership",
+      "Present interactive inventory, dashboards and reports in one application",
+      "Support repeatable access reviews and remediation through Microsoft Graph",
+    ],
+    designDecisions: [
+      "Used Teams SSO for a familiar, tenant-integrated administrator experience",
+      "Separated interactive APIs from scheduled inventory collection",
+      "Used managed identities for app-only Microsoft Graph and SharePoint access",
+      "Prevented overlapping background runs to control cost and protect tenant services",
+    ],
+    techStack: [
+      "Microsoft Teams",
+      "SharePoint Online",
+      "Microsoft Graph",
+      "Azure Functions",
+      "Azure Automation",
+      "Managed Identity",
+      "React",
+      "Azure DevOps",
+    ],
+    challenges: [
+      {
+        title: "Cross-service inventory correlation",
+        solution:
+          "Resolved Graph composite site identifiers and correlated site activity, Microsoft 365 groups, owners and members into a consistent inventory model.",
+      },
+      {
+        title: "Least-privilege automation",
+        solution:
+          "Separated runtime identities and documented the Graph and SharePoint permissions required by each workload.",
+      },
+    ],
+    learnings: [
+      "Designing tenant-wide inventory jobs for resilience and predictable cost",
+      "Balancing governance coverage with app-only least-privilege access",
+      "Making complex Microsoft 365 relationships understandable to administrators",
+    ],
+    confidentialityNote:
+      "This case study is intentionally anonymized. Organization names, tenant identifiers, source code, screenshots and security-sensitive implementation details are not published.",
+  },
+  {
+    id: "dataverse-azure-secure-integration",
+    name: "Secure Dataverse-to-Azure Integration",
+    shortName: "Dataverse + Azure",
+    status: "Professional case study",
+    category: "Power Platform",
+    role: "Power Platform engineer",
+    projectType: "Professional project",
+    featured: true,
+    overview:
+      "Implemented a secure integration pattern for synchronous Dataverse operations that need Azure-hosted secrets and services without embedding credentials in plugins or client applications.",
+    outcomes: [
+      "Establishes a reusable identity-based integration pattern for Dataverse extensions",
+      "Keeps environment-specific values outside source code and solution components",
+      "Supports governed deployment through Power Platform and Azure DevOps ALM pipelines",
+    ],
+    goals: [
+      "Use managed identity instead of stored application credentials",
+      "Return synchronous results through a Dataverse Custom API",
+      "Move the solution safely across development, test and production environments",
+    ],
+    designDecisions: [
+      "Registered a C# plug-in package as the Custom API message handler",
+      "Used Azure Key Vault as the protected secret source",
+      "Kept an Azure Function integration option for workloads better suited to an external service boundary",
+      "Parameterised connection references and environment-specific configuration for deployment",
+    ],
+    techStack: [
+      "Dataverse",
+      "Power Platform Custom API",
+      "C#",
+      "Managed Identity",
+      "Azure Key Vault",
+      "Azure Functions",
+      "Azure DevOps",
+      "Power Platform ALM",
+    ],
+    challenges: [
+      {
+        title: "Production identity binding",
+        solution:
+          "Worked through assembly signing and certificate requirements so the plug-in package could use a production-appropriate managed identity binding.",
+      },
+      {
+        title: "Environment portability",
+        solution:
+          "Separated deployable solution components from environment-specific values and documented the configuration required after import.",
+      },
+    ],
+    learnings: [
+      "Designing synchronous Dataverse integrations around platform execution constraints",
+      "Applying managed identity and certificate requirements to Power Platform extensions",
+      "Building ALM processes that account for both Dataverse and Azure resources",
+    ],
+    confidentialityNote:
+      "This professional case study omits organization-specific endpoints, identities, certificates, environment names and source code.",
+  },
+  {
+    id: "family-chore-hub",
+    name: "Family Chore Hub",
+    shortName: "Family Chore Hub",
+    status: "Completed",
+    category: "Full-Stack Engineering",
+    role: "Product designer and full-stack engineer",
+    projectType: "Public project",
+    featured: true,
+    githubUrl: "https://github.com/beretests/family-management-app",
+    overview:
+      "Built a private, mobile-first family management application for shared schedules, fair chore assignments, child-friendly task submissions, parent reviews, rewards and reminders.",
+    outcomes: [
+      "Delivers the complete MVP through authentication, schedules, chores, evidence review, points and rewards",
+      "Protects family and child data with row-level security and private storage",
+      "Runs on free-tier-friendly Supabase and Vercel services by default",
+    ],
+    goals: [
+      "Give each family member an understandable view of the household schedule",
+      "Distribute chores fairly while respecting age, preferences and workload",
+      "Make the experience engaging for children and useful for parents",
+    ],
+    designDecisions: [
+      "Used separate parent authentication and child profile-switching experiences",
+      "Applied Supabase row-level security to family-scoped data",
+      "Stored task evidence privately and added scheduled evidence cleanup",
+      "Built iteratively with phase-specific branches, worktrees, tests and review gates",
+    ],
+    techStack: [
+      "Next.js",
+      "TypeScript",
+      "Supabase Auth",
+      "PostgreSQL",
+      "Row-Level Security",
+      "Tailwind CSS",
+      "Vitest",
+      "Playwright",
+      "Vercel",
+    ],
+    challenges: [
+      {
+        title: "Safe child access",
+        solution:
+          "Designed Kid Mode around server-controlled profile switching rather than giving every child a separate external identity.",
+      },
+      {
+        title: "Fair assignment rules",
+        solution:
+          "Represented household, age, workload and preference constraints explicitly so assignment behaviour remains understandable and testable.",
+      },
+    ],
+    learnings: [
+      "Turning family routines into clear product and data rules",
+      "Using RLS and private storage as core design boundaries",
+      "Keeping a multi-phase application approachable for future contributors",
+    ],
+  },
+  {
+    id: "funstats-sports-platform",
+    name: "FunStats Sports Platform",
+    shortName: "FunStats",
     status: "Live",
-    gifUrl:
-      "https://res.cloudinary.com/dsspeyssh/image/upload/t_Thumbnail/v1731782768/portfolio-logo-darkblue_tp7pao.png",
+    category: "Full-Stack Engineering",
+    role: "Full-stack software engineer",
+    projectType: "Public project",
+    featured: true,
+    imageUrl:
+      "https://raw.githubusercontent.com/beretests/funstats-next-complete/main/public/images/hero.jpg",
+    imagePosition: "center",
+    liveUrl: "https://funstats.online",
+    liveLabel: "View live",
+    githubUrl: "https://github.com/beretests/funstats-next-complete",
+    overview:
+      "Built and evolved a sports statistics platform where young athletes can record performance, manage seasons and teams, and compare progress with friends.",
+    outcomes: [
+      "Supports season-aware game, team, tournament, award and player-stat workflows",
+      "Combines relational data modelling with a responsive, child-friendly interface",
+      "Uses resilient authentication and deployment workflows for a production application",
+    ],
+    goals: [
+      "Make detailed sports statistics approachable for young athletes",
+      "Support meaningful comparisons across games, seasons and friends",
+      "Build a maintainable full-stack application with secure authentication",
+    ],
+    designDecisions: [
+      "Modelled seasons, teams, games, tournaments and awards as relational domains",
+      "Used Supabase Auth session and refresh handling across the application boundary",
+      "Separated UI state, API access and domain data to support continued refactoring",
+      "Automated production deployment and process reloads through CI/CD",
+    ],
+    techStack: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "MUI",
+      "Zustand",
+      "Supabase Auth",
+      "Knex.js",
+      "PostgreSQL",
+      "CI/CD",
+    ],
+    challenges: [
+      {
+        title: "Reliable authentication",
+        solution:
+          "Improved session refresh, API error handling and forced logout behaviour so expired credentials fail safely and predictably.",
+      },
+      {
+        title: "Evolving a rich data model",
+        solution:
+          "Introduced clear relationships for seasons, teams, friends, tournaments and awards while preserving existing player-stat workflows.",
+      },
+    ],
+    learnings: [
+      "Evolving a capstone into a longer-lived product",
+      "Designing relational models for sports and social features",
+      "Diagnosing authentication and deployment issues across the full stack",
+    ],
+  },
+  {
+    id: "childcare-operations-platform",
+    name: "Childcare Operations Administration Platform",
+    shortName: "Childcare Operations",
+    status: "Professional case study",
+    category: "Full-Stack Engineering",
+    role: "Backend and DevOps engineer",
+    projectType: "Professional project",
+    featured: true,
+    overview:
+      "Contributed backend services and delivery automation to a childcare marketplace administration platform covering providers, bookings, subscriptions, verification and payment operations.",
+    outcomes: [
+      "Added administrator workflows for users, reviews, bookings, subscriptions and provider verification",
+      "Implemented a reliable one-time daily-pass payment path, including zero-dollar checkout handling",
+      "Maintained automated deployment and process-management workflows for the hosted application",
+    ],
+    goals: [
+      "Give administrators one place to manage marketplace operations",
+      "Handle paid and fully discounted checkout paths reliably",
+      "Keep deployment repeatable across frontend and backend services",
+    ],
+    designDecisions: [
+      "Used Firebase Authentication with Express authorization boundaries",
+      "Modelled verification records separately from provider summary flags",
+      "Used Stripe webhooks as the source for final subscription state",
+      "Automated VPS deployment and PM2 reloads through GitHub Actions",
+    ],
+    techStack: [
+      "Express.js",
+      "MySQL",
+      "Firebase Auth",
+      "Stripe",
+      "GitHub Actions",
+      "PM2",
+      "REST APIs",
+    ],
+    challenges: [
+      {
+        title: "Zero-dollar checkout",
+        solution:
+          "Used a SetupIntent path when a one-time coupon reduced the charge to zero, while keeping webhook-driven subscription updates consistent.",
+      },
+      {
+        title: "Verification consistency",
+        solution:
+          "Kept detailed criminal-record and child-abuse checks in dedicated tables and synchronized provider-level verification indicators.",
+      },
+    ],
+    learnings: [
+      "Designing payment flows for both charged and fully discounted outcomes",
+      "Maintaining data consistency across webhooks and administrative actions",
+      "Supporting product delivery across backend development and operations",
+    ],
+    confidentialityNote:
+      "This case study describes my contribution at a high level and excludes client data, private source code and internal operational details.",
+  },
+  {
+    id: "choir-repertoire",
+    name: "Church Choir Repertoire Manager",
+    shortName: "Choir Repertoire",
+    status: "Live",
+    category: "Full-Stack Engineering",
+    role: "Full-stack software engineer",
+    projectType: "Public project",
+    featured: false,
+    liveUrl: "https://ctk-songs.beretesting.com/",
+    liveLabel: "View live",
+    githubUrl: "https://github.com/beretests/choir-repertoire",
+    overview:
+      "Built a responsive repertoire manager so choir members can find scheduled songs, recordings and notes from any device.",
+    outcomes: [
+      "Centralizes repertoire and rehearsal recordings",
+      "Organizes schedules through year, month, date and song relationships",
+      "Supports convenient browser-based audio playback",
+    ],
+    goals: [
+      "Replace scattered repertoire links and recordings with one searchable experience",
+      "Make weekly preparation easier on mobile devices",
+    ],
+    designDecisions: [
+      "Mirrored the choir schedule hierarchy in the database and navigation",
+      "Used Supabase for relational data, authentication and media storage",
+      "Built the interface with responsive Next.js and Material UI components",
+    ],
+    techStack: ["Next.js", "TypeScript", "Material UI", "Supabase", "PostgreSQL"],
+    challenges: [
+      {
+        title: "Predictable schedule navigation",
+        solution:
+          "Aligned database relationships and route structure so members can move naturally from a service date to its songs and recordings.",
+      },
+    ],
+    learnings: [
+      "Designing hierarchical content around a real community workflow",
+      "Managing media-backed content with Supabase",
+    ],
+  },
+  {
+    id: "leetcode-discord-bot",
+    name: "LeetCode Daily Challenge Discord Bot",
+    shortName: "Discord Challenge Bot",
+    status: "Completed",
+    category: "Full-Stack Engineering",
+    role: "Python developer",
+    projectType: "Public project",
+    featured: false,
     githubUrl:
       "https://github.com/beretests/Useful-python-scripts/blob/discord-leetcode-bot/discord-leetcode/discord-leetcode-db.py",
     overview:
-      "After finishing my software engineering diploma, many developer roles required LeetCode-style assessments. To stay consistent—and encourage peers—I built a Discord bot that automatically posts a daily LeetCode challenge. It was also a chance to deepen Python skills and integrate external APIs and AWS services.",
+      "Created a Discord bot that posts a daily coding challenge, starts an organized discussion thread and prevents questions from being repeated.",
+    outcomes: [
+      "Automates daily challenge delivery for a peer-learning community",
+      "Keeps challenge history and discussion organized",
+      "Uses persistent state to prevent duplicate posts",
+    ],
     goals: [
-      "Automate posting of daily LeetCode challenges to a Discord community",
-      "Improve engagement and consistency in coding practice",
-      "Learn Discord bot development and strengthen AWS/web scraping skills",
+      "Encourage consistent interview-practice habits",
+      "Build practical experience with asynchronous Python and AWS services",
     ],
     designDecisions: [
-      "Discord threads to keep each challenge and discussion organized",
-      "DynamoDB to store posted/unposted questions and prevent duplicates",
-      "LeetScrape API to retrieve LeetCode question content",
-      "Message splitting to handle Discord’s 2,000-character limit",
-      "Scheduled tasks to post challenges every 24 hours",
-      "Environment variables to keep tokens and credentials secure",
+      "Used Discord threads to keep each challenge and its discussion together",
+      "Stored question state in DynamoDB",
+      "Split long problem descriptions safely around Discord message limits",
     ],
-    techStack: ["Python", "Discord.py", "AWS DynamoDB (Boto3)", "LeetScrape", "dotenv"],
+    techStack: ["Python", "Discord.py", "AWS DynamoDB", "Boto3", "LeetScrape"],
     challenges: [
       {
-        title: "Handling large question text within Discord limits",
+        title: "Discord message limits",
         solution:
-          "Implemented a splitter that breaks long descriptions into smaller messages without breaking formatting to stay under 2,000 characters.",
-      },
-      {
-        title: "Preventing duplicate posts",
-        solution:
-          "Tracked posted/unposted questions in DynamoDB and always fetched the next unposted item before posting.",
+          "Split long question descriptions into readable messages without losing their formatting or sequence.",
       },
     ],
     learnings: [
-      "Practical asynchronous programming in Python",
-      "Building Discord bots that integrate AWS and external scraping APIs",
-      "Formatting and delivering long content in chat environments",
-      "Scheduling background tasks while maintaining data integrity across systems",
-    ],
-  },
-  {
-    id: "14b93b54-cecd-4f28-8a32-42036f9a95aa",
-    status: "Live",
-    name: "Funstats App",
-    gifUrl:
-      "https://res.cloudinary.com/dsspeyssh/image/upload/t_Thumbnail/v1731782768/portfolio-logo-darkblue_tp7pao.png",
-    liveUrl: "https://funstats.online",
-    githubUrl: "https://github.com/beretests/brainstation-capstone-funstats",
-    overview:
-      "Built a sports stats tracker so athletes can log and compare performance. Used it to deepen full-stack skills with React/Express, relational DB design, and Cloudinary for media.",
-    goals: [
-      "Create an intuitive interface for athletes to track/compare stats",
-      "Practice full-stack development with React + Express + SQL",
-      "Integrate third-party media storage (Cloudinary) for profile images",
-    ],
-    designDecisions: [
-      "Component-based React UI with SASS for styling flexibility",
-      "Express API with JWT auth for secure access",
-      "Relational schema for users, stats, relationships; Knex.js for queries",
-      "Cloudinary for efficient media storage and transformation",
-    ],
-    techStack: ["React", "SASS", "Express.js", "MySQL", "Knex.js", "Cloudinary", "JWT"],
-    challenges: [
-      {
-        title: "Managing performance with growing data",
-        solution:
-          "Optimized queries, added indexes, and tuned API responses to keep comparisons fast even with larger datasets.",
-      },
-      {
-        title: "Keeping authentication secure",
-        solution:
-          "Hardened JWT handling, tightened middleware, and improved error handling around auth flows.",
-      },
-    ],
-    learnings: [
-      "Relational modeling for comparison features and social elements",
-      "JWT-based auth patterns in Express",
-      "Cloudinary integration and secure media handling",
-      "Debugging and performance tuning across React + Express + MySQL",
-    ],
-  },
-  {
-    id: "15c4b285-82be-4978-b434-fee1e4f5679f",
-    name: "Funstats App - Refactored Project",
-    status: "WIP",
-    gifUrl:
-      "https://res.cloudinary.com/dsspeyssh/image/upload/t_Thumbnail/v1731782768/portfolio-logo-darkblue_tp7pao.png",
-    githubUrl: "https://github.com/beretests/funstats-next-app",
-    overview: "Refactoring Funstats into a Next.js stack with improved DX.",
-    goals: [
-      "Migrate to Next.js for better DX and performance",
-      "Refine data model and UI for comparisons",
-      "Tighten authentication and API patterns",
-    ],
-    designDecisions: [
-      "Next.js App Router for routing/data fetching",
-      "TypeScript-first components for safer refactors",
-      "API rework for clearer domain boundaries",
-    ],
-    techStack: ["Next.js", "TypeScript", "Supabase"],
-    challenges: [],
-    learnings: [],
-  },
-  {
-    id: "3a591773-aa65-4e87-9ed7-a9df5ff5aec0",
-    name: "Funstats App Mobile",
-    status: "Not Started",
-    gifUrl:
-      "https://res.cloudinary.com/dsspeyssh/image/upload/t_Thumbnail/v1731782768/portfolio-logo-darkblue_tp7pao.png",
-    overview:
-      "Mobile version of Funstats to track athlete performance with a modern React Native + Supabase stack.",
-    goals: [
-      "Deliver a mobile-first experience for athletes",
-      "Support multi-sport stat tracking with real-time updates",
-      "Strengthen mobile auth and offline-friendly patterns",
-    ],
-    designDecisions: [
-      "React Navigation for mobile routing",
-      "Flexible schema to accommodate multiple sports and stat types",
-      "Zod/form validation for reliable input handling",
-      "Tailwind-style utility classes for consistent styling",
-      "Supabase real-time for live stat updates",
-    ],
-    techStack: ["React Native", "Node.js", "Supabase", "Zod"],
-    challenges: [
-      {
-        title: "Real-time updates on mobile",
-        solution:
-          "Tuned Supabase subscriptions and minimized payloads to keep UI responsive on slower connections.",
-      },
-      {
-        title: "Authentication state persistence",
-        solution:
-          "Improved token handling and rehydration so sessions survive app restarts.",
-      },
-    ],
-    learnings: [
-      "State management in complex React Native apps",
-      "Supabase real-time usage on mobile",
-      "Designing flexible schemas for multi-sport stats",
+      "Asynchronous bot development",
+      "Scheduling background work with persistent cloud state",
     ],
   },
 ];

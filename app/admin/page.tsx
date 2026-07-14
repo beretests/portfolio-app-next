@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import BlogEditorPage from "../blog/editor/page";
-import AdminProjectsPage from "../blog/admin/projects/page";
 import AboutUploader from "../blog/admin/AboutUploader";
 import AdminResumeUploader from "../blog/admin/ResumeUploader";
 
@@ -70,7 +69,30 @@ export default function AdminDashboardPage() {
 
       <div className="rounded-xl border border-borderSecondary bg-background shadow-sm p-4 md:p-6">
         {activeTab === "blog" && <BlogEditorPage />}
-        {activeTab === "projects" && <AdminProjectsPage />}
+        {activeTab === "projects" && (
+          <div className="space-y-4 rounded-xl border border-borderSecondary bg-secondary/30 p-6">
+            <h2 className="font-[family-name:var(--font-headings)] text-xl font-bold text-foreground">
+              Projects are managed through GitHub
+            </h2>
+            <p className="max-w-3xl leading-7 text-foreground/80">
+              Portfolio case studies include reviewed professional claims and
+              confidentiality notes, so their source of truth is now{" "}
+              <code className="rounded bg-background px-1.5 py-1 text-sm">
+                data/projects.ts
+              </code>
+              . Update that file through a pull request so changes remain
+              versioned and reviewable.
+            </p>
+            <a
+              href="https://github.com/beretests/portfolio-app-next/blob/main/data/projects.ts"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex rounded-md bg-primary px-4 py-2 font-[family-name:var(--font-cta)] text-sm font-bold text-background transition hover:opacity-90"
+            >
+              View project content on GitHub
+            </a>
+          </div>
+        )}
         {activeTab === "about" && (
           <div className="space-y-4">
             <p className="text-sm text-foreground/80 font-[family-name:var(--font-body)]">

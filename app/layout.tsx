@@ -8,14 +8,6 @@ import Favicon from "./images/portfolio-logo-white.png";
 import Footer from "./components/Footer";
 import { TrackingComponent } from "./TrackingComponent";
 import { Suspense } from "react";
-// app/layout.tsx
-import { Dancing_Script } from "next/font/google";
-
-const dancingScript = Dancing_Script({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-special",
-});
 
 const sourceSans = localFont({
   src: "./fonts/SourceSans3-VariableFont_wght.ttf",
@@ -48,8 +40,12 @@ const engagement = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Eberechi Omeje",
-  description: "My portfolio website",
+  title: {
+    default: "Eberechi Omeje | Power Platform, Azure & Full-Stack Engineer",
+    template: "%s | Eberechi Omeje",
+  },
+  description:
+    "Portfolio of Eberechi Omeje, a Power Platform engineer, Microsoft Azure solutions architect and full-stack software engineer.",
   icons: [{ rel: "icon", type: "image/png", url: Favicon.src }],
 };
 
@@ -61,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${sourceSans.variable} ${playfairDisplay.variable} ${lora.variable} ${dmSans.variable}  ${dancingScript.variable} antialiased`}
+        className={`${sourceSans.variable} ${playfairDisplay.variable} ${lora.variable} ${dmSans.variable} ${engagement.variable} antialiased`}
       >
         <Suspense>
           <TrackingComponent />
