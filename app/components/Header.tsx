@@ -83,7 +83,7 @@ const Header: React.FC = () => {
           <NavLink href="/about">About</NavLink>
           <NavLink href="/resume">Resume</NavLink>
           <NavLink href="/projects">Projects</NavLink>
-          <NavLink href="/blog">Blog</NavLink>
+          <NavLink href="/blog">Field Notes</NavLink>
           {isAdmin && <NavLink href="/admin">Admin</NavLink>}
         </nav>
 
@@ -116,7 +116,7 @@ const Header: React.FC = () => {
             Projects
           </NavLink>
           <NavLink href="/blog" onClick={toggleMenu}>
-            Blog
+            Field Notes
           </NavLink>
           {isAdmin && (
             <NavLink href="/admin" onClick={toggleMenu}>
