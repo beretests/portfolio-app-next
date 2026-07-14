@@ -15,7 +15,7 @@ const CardFront: React.FC<CardFrontProps> = ({ title, body }) => {
         {body}
       </p>
       <p className="text-center text-xs text-background">
-        (click to view some pics)
+        Click to view photos
       </p>
     </div>
   );

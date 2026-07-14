@@ -12,15 +12,22 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ title, body, images }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const handleClick = () => {
-    setIsFlipped(!isFlipped);
-  };
-
   return (
     <div className="w-full p-4 relative">
       <motion.div
-        className="relative w-full aspect-video cursor-pointer"
-        onClick={handleClick}
+        className={`relative w-full aspect-video ${
+          isFlipped ? "" : "cursor-pointer"
+        }`}
+        onClick={isFlipped ? undefined : () => setIsFlipped(true)}
+        onKeyDown={(event) => {
+          if (!isFlipped && (event.key === "Enter" || event.key === " ")) {
+            event.preventDefault();
+            setIsFlipped(true);
+          }
+        }}
+        role={isFlipped ? undefined : "button"}
+        tabIndex={isFlipped ? -1 : 0}
+        aria-label={isFlipped ? undefined : `View ${title} photos`}
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6 }}
         style={{ transformStyle: "preserve-3d" }}
@@ -32,7 +39,7 @@ const Card: React.FC<CardProps> = ({ title, body, images }) => {
           className="absolute w-full h-full backface-hidden"
           style={{ transform: "rotateY(180deg)" }}
         >
-          <CardBack images={images} />
+          <CardBack images={images} onBack={() => setIsFlipped(false)} />
         </div>
       </motion.div>
     </div>
