@@ -19,6 +19,7 @@ export type Project = {
   liveUrl?: string;
   liveLabel?: string;
   githubUrl?: string;
+  articleUrl?: string;
   overview: string;
   outcomes: string[];
   goals: string[];
@@ -149,6 +150,80 @@ export const projects: Project[] = [
     ],
     confidentialityNote:
       "This case study is intentionally anonymized. Organization names, tenant identifiers, source code, screenshots and security-sensitive implementation details are not published.",
+  },
+  {
+    id: "event-driven-key-vault-credential-rotation",
+    name: "Event-Driven Azure Key Vault Credential Rotation",
+    shortName: "Key Vault Rotation",
+    status: "Professional case study",
+    category: "Azure & Microsoft 365",
+    role: "Azure solutions engineer",
+    projectType: "Professional project",
+    featured: true,
+    articleUrl:
+      "/blog/resilient-event-driven-key-vault-credential-rotation",
+    overview:
+      "Designed and implemented event-driven Azure Functions that rotate Microsoft Entra application secrets and synchronize new Key Vault certificate versions, with controlled credential overlap and timer-driven reconciliation for missed work.",
+    outcomes: [
+      "Automates credential rotation from Key Vault lifecycle events without embedding service credentials in the Function App",
+      "Keeps previous credentials available during a configurable overlap window before safe retirement",
+      "Adds locking, idempotency, audit state, reconciliation, dead-lettering, alerts and operational notifications",
+    ],
+    goals: [
+      "Reduce expiry risk and recurring manual credential handoffs",
+      "Process duplicate and retried Event Grid deliveries safely",
+      "Recover from missed events and partial failures without creating hidden credential drift",
+      "Deploy repeatably through Azure Pipelines with least-privilege managed identity access",
+    ],
+    designDecisions: [
+      "Used Event Grid as the primary trigger and a six-hour timer as an independent reconciliation path",
+      "Applied per-application locks and idempotency records in Table Storage",
+      "Separated credential activation from retirement through delayed overlap cleanup",
+      "Added a compensating Microsoft Graph removal when a newly created password cannot be written to Key Vault",
+      "Kept Teams notifications best effort so notification failures do not invalidate successful rotation work",
+    ],
+    techStack: [
+      "Azure Functions",
+      "PowerShell",
+      "Azure Key Vault",
+      "Azure Event Grid",
+      "Microsoft Graph",
+      "Microsoft Entra ID",
+      "Managed Identity",
+      "Azure Table Storage",
+      "Azure Pipelines",
+      "Teams Workflows",
+    ],
+    challenges: [
+      {
+        title: "At-least-once event delivery",
+        solution:
+          "Combined a bounded idempotency window with expiring per-application locks so repeated and concurrent deliveries do not create duplicate credentials.",
+      },
+      {
+        title: "Cross-service partial failure",
+        solution:
+          "Implemented compensating cleanup when Graph creates a password but the Key Vault write fails, and recorded explicit run states for operator follow-up.",
+      },
+      {
+        title: "Missed rotation work",
+        solution:
+          "Built a capped timer-triggered reconciliation scan that detects expiring secrets, certificate drift and delayed cleanup, then routes the work through the same rotation handler.",
+      },
+      {
+        title: "Safe credential retirement",
+        solution:
+          "Kept old passwords and certificates during a configurable grace period and removed them only after a valid replacement was active.",
+      },
+    ],
+    learnings: [
+      "Designing event-driven automation around duplicate and missed delivery",
+      "Using compensation and explicit state to manage distributed partial failure",
+      "Separating credential activation, adoption and retirement into safe operational stages",
+      "Treating audit, alerting and reconciliation as core architecture rather than add-ons",
+    ],
+    confidentialityNote:
+      "This case study is based on work maintained in a private Azure DevOps repository. Tenant, vault, application, pipeline and organization identifiers—as well as source code and security-sensitive configuration—are not published.",
   },
   {
     id: "dataverse-azure-secure-integration",
@@ -334,7 +409,7 @@ export const projects: Project[] = [
     category: "Full-Stack Engineering",
     role: "Backend and DevOps engineer",
     projectType: "Professional project",
-    featured: true,
+    featured: false,
     overview:
       "Contributed backend services and delivery automation to a childcare marketplace administration platform covering providers, bookings, subscriptions, verification and payment operations.",
     outcomes: [

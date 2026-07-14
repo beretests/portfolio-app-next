@@ -77,7 +77,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           ))}
         </div>
 
-        {(project.liveUrl || project.githubUrl) && (
+        {(project.liveUrl || project.githubUrl || project.articleUrl) && (
           <div className="mt-7 flex flex-wrap gap-3">
             {project.liveUrl && (
               <a
@@ -98,6 +98,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               >
                 View GitHub repository
               </a>
+            )}
+            {project.articleUrl && (
+              <Link
+                href={project.articleUrl}
+                className="rounded-md border border-borderSecondary bg-background/70 px-4 py-2.5 font-[family-name:var(--font-cta)] text-sm font-bold text-foreground transition hover:bg-hover"
+              >
+                Read architecture field note
+              </Link>
             )}
           </div>
         )}

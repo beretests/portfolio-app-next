@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 const ADMIN_PATHS = [
   "/blog/editor",
   "/api/blog/admin/create",
+  "/api/blog/admin/upload",
   "/api/blog/admin/update",
   "/api/blog/admin/delete",
   "/api/about/admin/upload",
@@ -69,7 +70,12 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Redirect unauthenticated users to the admin sign-in page
+  // API clients need a machine-readable status instead of a redirect to HTML.
+  if (pathname.startsWith("/api/")) {
+    return unauthorized();
+  }
+
+  // Redirect unauthenticated page requests to the admin sign-in page.
   const signInUrl = new URL("/blog/admin/sign-in", request.url);
   return NextResponse.redirect(signInUrl);
 }
