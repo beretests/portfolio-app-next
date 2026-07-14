@@ -2,18 +2,14 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { isAdminRequest } from "@/lib/admin-auth";
+import { curatedBlogPosts } from "@/data/blog-posts";
+import { mergeBlogPosts, type BlogPost } from "@/lib/blog";
 
 export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
-  const adminUser = process.env.BLOG_ADMIN_USER;
-  const adminPass = process.env.BLOG_ADMIN_PASS;
-  const expectedToken =
-    adminUser && adminPass
-      ? Buffer.from(`${adminUser}:${adminPass}`).toString("base64")
-      : null;
-  const cookieToken = req.cookies.get("admin-auth")?.value;
-  const isAdmin = expectedToken && cookieToken === expectedToken;
+  const isAdmin = isAdminRequest(req);
 
   const client = isAdmin ? supabaseAdmin : supabase;
   const query = client
@@ -29,8 +25,15 @@ export async function GET(req: NextRequest) {
 
   if (error) {
     console.error("Error fetching posts:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (isAdmin) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ posts: mergeBlogPosts(curatedBlogPosts, []) });
   }
 
-  return NextResponse.json({ posts: data ?? [] });
+  const databasePosts = (data ?? []) as BlogPost[];
+  return NextResponse.json({
+    posts: mergeBlogPosts(curatedBlogPosts, databasePosts),
+  });
 }
