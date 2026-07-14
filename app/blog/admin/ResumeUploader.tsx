@@ -7,7 +7,12 @@ import Skeleton from "@mui/material/Skeleton";
 
 type WorkItem = { role: string; company: string; dates: string; bullets: string[] };
 type EducationItem = { school: string; degree: string; dates: string; details?: string };
-type CertificationItem = { name: string; issuer?: string; date?: string };
+type CertificationItem = {
+  name: string;
+  issuer?: string;
+  date?: string;
+  status?: "Earned" | "Planned";
+};
 type LangFramework = { name: string; icon?: string | null };
 
 export default function AdminResumeUploader() {
@@ -196,7 +201,7 @@ export default function AdminResumeUploader() {
           Certifications (JSON array)
         </label>
         <p className="text-xs text-foreground/70 mb-2">
-          Format: [{`{"name":"","issuer":"","date":""}`}]
+          Format: [{`{"name":"","issuer":"","date":"","status":"Earned"}`}]
         </p>
         {loading ? (
           <Skeleton height={90} />
@@ -206,7 +211,7 @@ export default function AdminResumeUploader() {
             rows={3}
             value={certifications}
             onChange={(e) => setCertifications(e.target.value)}
-            placeholder='[{"name":"","issuer":"","date":""}]'
+            placeholder='[{"name":"","issuer":"","date":"","status":"Earned"}]'
           />
         )}
       </div>
