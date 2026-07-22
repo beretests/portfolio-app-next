@@ -18,7 +18,7 @@ const CardBack: React.FC<CardBackProps> = ({ images, onBack }) => {
         className="absolute right-3 top-3 z-20 rounded-full bg-background/85 px-3 py-1.5 text-xs font-semibold text-foreground shadow-md transition hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         aria-label="Return to interest details"
       >
-        Back to details
+        Back
       </button>
     </div>
   );
