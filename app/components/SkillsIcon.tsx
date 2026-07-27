@@ -1,26 +1,51 @@
 import React from "react";
 import { FaReact } from "react-icons/fa";
 import { FaGit, FaHtml5 } from "react-icons/fa";
-import { FaAws, FaCss3Alt, FaDocker, FaNodeJs, FaPython } from "react-icons/fa6";
+import {
+  FaAws,
+  FaCss3Alt,
+  FaDocker,
+  FaJava,
+  FaNodeJs,
+  FaPython,
+} from "react-icons/fa6";
 import { RiNextjsFill, RiSupabaseFill } from "react-icons/ri";
 import { BiLogoPostgresql } from "react-icons/bi";
 import {
   SiAnsible,
+  SiAzuredevops,
+  SiAzurefunctions,
+  SiDataverse,
+  SiDotnet,
+  SiGitlab,
   SiJavascript,
   SiK6,
   SiKubernetes,
+  SiMicrosoft,
   SiMicrosoftazure,
+  SiMicrosoftsharepoint,
   SiMysql,
   SiNginx,
   SiPlaywright,
   SiPostman,
+  SiPowerapps,
+  SiPowerautomate,
+  SiPowerfx,
+  SiPowershell,
+  SiRedux,
   SiSelenium,
   SiTailwindcss,
   SiTerraform,
   SiTypescript,
 } from "react-icons/si";
 import { FaCloudflare } from "react-icons/fa6";
-import { TbBrandReactNative } from "react-icons/tb";
+import {
+  TbApi,
+  TbBrandCSharp,
+  TbBrandReactNative,
+  TbFingerprint,
+  TbKey,
+} from "react-icons/tb";
 import type { ComponentType } from "react";
 
 export const iconNames = [
@@ -50,6 +75,23 @@ export const iconNames = [
   "Ansible",
   "Git",
   "Postman",
+  "PowerApps",
+  "PowerAutomate",
+  "Dataverse",
+  "PowerFx",
+  "AzureFunctions",
+  "AzureKeyVault",
+  "EntraId",
+  "Microsoft365",
+  "SharePoint",
+  "DotNet",
+  "CSharp",
+  "PowerShell",
+  "AzureDevOps",
+  "MicrosoftGraph",
+  "Java",
+  "Redux",
+  "GitLab",
 ] as const;
 
 export type IconName = (typeof iconNames)[number];
@@ -83,6 +125,23 @@ const iconMap: Record<IconName, ComponentType<{ className?: string }>> = {
   Ansible: SiAnsible,
   Git: FaGit,
   Postman: SiPostman,
+  PowerApps: SiPowerapps,
+  PowerAutomate: SiPowerautomate,
+  Dataverse: SiDataverse,
+  PowerFx: SiPowerfx,
+  AzureFunctions: SiAzurefunctions,
+  AzureKeyVault: TbKey,
+  EntraId: TbFingerprint,
+  Microsoft365: SiMicrosoft,
+  SharePoint: SiMicrosoftsharepoint,
+  DotNet: SiDotnet,
+  CSharp: TbBrandCSharp,
+  PowerShell: SiPowershell,
+  AzureDevOps: SiAzuredevops,
+  MicrosoftGraph: TbApi,
+  Java: FaJava,
+  Redux: SiRedux,
+  GitLab: SiGitlab,
 };
 
 const defaultIcons: SkillsIconItem[] = Object.keys(iconMap).map((key) => ({
