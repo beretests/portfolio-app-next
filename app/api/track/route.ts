@@ -70,6 +70,16 @@ async function countUniqueVisitors() {
   return cachedCount;
 }
 
+async function countUniquePageVisitors(pagePath: string) {
+  const { count, error } = await supabaseAdmin
+    .from("page_visitors")
+    .select("visitor_id", { count: "exact", head: true })
+    .eq("page_path", pagePath);
+
+  if (error) throw error;
+  return count ?? 0;
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const ip = getClientIp(req);
@@ -142,11 +152,17 @@ export async function POST(req: NextRequest) {
 
   try {
     const uniqueVisitorCount = await countUniqueVisitors();
+    const pageUniqueVisitorCount =
+      !pageVisitorError && /^\/blog\/[^/]+$/.test(pageUrl)
+        ? await countUniquePageVisitors(pageUrl)
+        : null;
+
     return NextResponse.json({
       success: true,
       visitorId,
       sessionId,
       uniqueVisitorCount,
+      pageUniqueVisitorCount,
     });
   } catch (error: any) {
     console.error("Error counting visitors:", error);
@@ -154,11 +170,46 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Lightweight endpoint to fetch just the unique visitor count
-export async function GET() {
+// Public endpoint exposes aggregate counts only—never visitor-level data.
+export async function GET(req: NextRequest) {
   try {
+    const page = req.nextUrl.searchParams.get("page");
+    if (page) {
+      const pagePath = normalizePagePath(page);
+      if (!/^\/blog\/[^/]+$/.test(pagePath)) {
+        return NextResponse.json({ error: "Invalid blog path" }, { status: 400 });
+      }
+
+      const count = await countUniquePageVisitors(pagePath);
+      return NextResponse.json(
+        { count },
+        { headers: { "Cache-Control": "public, max-age=60" } }
+      );
+    }
+
+    if (req.nextUrl.searchParams.get("scope") === "blog") {
+      const { data, error } = await supabaseAdmin.rpc("get_analytics_summary");
+      if (error) throw error;
+
+      const blogPosts = Array.isArray(data?.blogPosts) ? data.blogPosts : [];
+      const counts = Object.fromEntries(
+        blogPosts.map((post: { path: string; uniqueVisitors: number }) => [
+          post.path,
+          post.uniqueVisitors,
+        ])
+      );
+
+      return NextResponse.json(
+        { counts },
+        { headers: { "Cache-Control": "public, max-age=60" } }
+      );
+    }
+
     const uniqueVisitorCount = await countUniqueVisitors();
-    return NextResponse.json({ count: uniqueVisitorCount });
+    return NextResponse.json(
+      { count: uniqueVisitorCount },
+      { headers: { "Cache-Control": "public, max-age=60" } }
+    );
   } catch (error: any) {
     console.error("Error fetching visitor count:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });

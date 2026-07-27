@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { VisitorCounter } from "./VisitorCounter";
 
 const disciplines = [
   "Power Platform Engineering",
@@ -41,6 +42,10 @@ export default function HeroSection() {
             >
               View resume
             </Link>
+          </div>
+
+          <div className="mt-6">
+            <VisitorCounter />
           </div>
         </div>
 

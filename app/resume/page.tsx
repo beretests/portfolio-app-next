@@ -25,6 +25,26 @@ type CertificationItem = {
 };
 type LangFramework = { name: string; icon?: string | null };
 
+const supplementalLanguages: LangFramework[] = [
+  { name: "Power Apps", icon: "PowerApps" },
+  { name: "Power Automate", icon: "PowerAutomate" },
+  { name: "Dataverse", icon: "Dataverse" },
+  { name: "Power Fx", icon: "PowerFx" },
+  { name: "Azure Functions", icon: "AzureFunctions" },
+  { name: "Azure Key Vault", icon: "AzureKeyVault" },
+  { name: "Microsoft Entra ID", icon: "EntraId" },
+  { name: "Microsoft 365", icon: "Microsoft365" },
+  { name: "SharePoint", icon: "SharePoint" },
+  { name: ".NET", icon: "DotNet" },
+  { name: "C#", icon: "CSharp" },
+  { name: "PowerShell", icon: "PowerShell" },
+  { name: "Azure DevOps", icon: "AzureDevOps" },
+  { name: "Microsoft Graph", icon: "MicrosoftGraph" },
+  { name: "Java", icon: "Java" },
+  { name: "Redux", icon: "Redux" },
+  { name: "GitLab", icon: "GitLab" },
+];
+
 const fallback = {
   headline:
     "Power Platform Engineer | Azure Solutions Architect | Full-Stack Software Engineer",
@@ -194,6 +214,7 @@ const fallback = {
     { name: "Ansible", icon: "Ansible" },
     { name: "Git", icon: "Git" },
     { name: "Postman", icon: "Postman" },
+    ...supplementalLanguages,
   ],
 };
 
@@ -223,10 +244,20 @@ export default async function ResumePage() {
   const certifications = ((currentContent?.certifications as CertificationItem[]) ||
     fallback.certifications) as CertificationItem[];
   const allowedIcons = new Set<IconName>(iconNames);
-  const languages: SkillsIconItem[] = (
+  const configuredLanguages = (
     (currentContent?.languages_frameworks as LangFramework[]) ||
     fallback.languages_frameworks
-  ).map((l) => ({
+  );
+  const configuredNames = new Set(
+    configuredLanguages.map((language) => language.name.toLowerCase())
+  );
+  const mergedLanguages = [
+    ...configuredLanguages,
+    ...supplementalLanguages.filter(
+      (language) => !configuredNames.has(language.name.toLowerCase())
+    ),
+  ];
+  const languages: SkillsIconItem[] = mergedLanguages.map((l) => ({
     name: l.name,
     icon:
       typeof l.icon === "string" && allowedIcons.has(l.icon as IconName)

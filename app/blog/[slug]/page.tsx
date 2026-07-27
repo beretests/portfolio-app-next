@@ -12,6 +12,7 @@ import {
   type BlogPost,
 } from "@/lib/blog";
 import { supabase } from "@/lib/supabase";
+import BlogViewCount from "@/app/components/BlogViewCount";
 
 export const dynamicParams = true;
 
@@ -129,6 +130,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <time dateTime={post.date}>{formatBlogDate(post.date)}</time>
             <span aria-hidden>·</span>
             <span>{getReadingTime(post.body)} min read</span>
+            <BlogViewCount slug={post.slug} />
           </div>
         </header>
 

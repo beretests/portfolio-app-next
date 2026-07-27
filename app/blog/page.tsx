@@ -47,10 +47,22 @@ function PostArtwork({ post, featured = false }: { post: BlogPost; featured?: bo
   );
 }
 
-function PostMeta({ post }: { post: BlogPost }) {
+function PostMeta({
+  post,
+  viewCount,
+}: {
+  post: BlogPost;
+  viewCount?: number;
+}) {
   return (
     <p className="text-xs font-semibold text-foreground/65">
       {formatBlogDate(post.date)} · {getReadingTime(post.body)} min read
+      {typeof viewCount === "number" && (
+        <>
+          {" · "}
+          {viewCount.toLocaleString()} unique {viewCount === 1 ? "view" : "views"}
+        </>
+      )}
     </p>
   );
 }
@@ -61,6 +73,7 @@ export default function BlogPage() {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [viewCounts, setViewCounts] = useState<Record<string, number> | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -89,6 +102,26 @@ export default function BlogPage() {
     }
 
     loadPosts();
+    return () => controller.abort();
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch("/api/track?scope=blog", { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) return;
+        const payload = (await response.json()) as {
+          counts?: Record<string, number>;
+        };
+        setViewCounts(payload.counts ?? {});
+      })
+      .catch((viewError) => {
+        if ((viewError as Error).name !== "AbortError") {
+          console.error("Failed to load blog view counts");
+        }
+      });
+
     return () => controller.abort();
   }, []);
 
@@ -199,7 +232,16 @@ export default function BlogPage() {
               <p className="mt-4 leading-7 text-foreground/75">
                 {featuredPost.description}
               </p>
-              <div className="mt-5"><PostMeta post={featuredPost} /></div>
+              <div className="mt-5">
+                <PostMeta
+                  post={featuredPost}
+                  viewCount={
+                    viewCounts
+                      ? viewCounts[`/blog/${featuredPost.slug}`] ?? 0
+                      : undefined
+                  }
+                />
+              </div>
               <Link
                 href={`/blog/${featuredPost.slug}`}
                 className="mt-6 inline-flex w-fit items-center gap-2 rounded-md bg-primary px-4 py-2.5 font-[family-name:var(--font-cta)] text-sm font-bold text-background transition hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
@@ -241,7 +283,16 @@ export default function BlogPage() {
                       <p className="mt-3 line-clamp-3 text-sm leading-6 text-foreground/75">
                         {post.description}
                       </p>
-                      <div className="mt-4"><PostMeta post={post} /></div>
+                      <div className="mt-4">
+                        <PostMeta
+                          post={post}
+                          viewCount={
+                            viewCounts
+                              ? viewCounts[`/blog/${post.slug}`] ?? 0
+                              : undefined
+                          }
+                        />
+                      </div>
                       <Link href={`/blog/${post.slug}`} className="mt-auto pt-5 text-sm font-bold text-link transition hover:text-primary">
                         Read article <span aria-hidden>→</span>
                       </Link>
