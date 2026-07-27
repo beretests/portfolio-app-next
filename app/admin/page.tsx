@@ -4,10 +4,12 @@ import { useState } from "react";
 import BlogEditorPage from "../blog/editor/page";
 import AboutUploader from "../blog/admin/AboutUploader";
 import AdminResumeUploader from "../blog/admin/ResumeUploader";
+import AnalyticsPanel from "../components/AnalyticsPanel";
 
-type Tab = "blog" | "projects" | "about" | "resume";
+type Tab = "analytics" | "blog" | "projects" | "about" | "resume";
 
 const tabs: { id: Tab; label: string }[] = [
+  { id: "analytics", label: "Analytics" },
   { id: "blog", label: "Blog" },
   { id: "projects", label: "Projects" },
   { id: "about", label: "About Images" },
@@ -15,7 +17,7 @@ const tabs: { id: Tab; label: string }[] = [
 ];
 
 export default function AdminDashboardPage() {
-  const [activeTab, setActiveTab] = useState<Tab>("blog");
+  const [activeTab, setActiveTab] = useState<Tab>("analytics");
   const [signingOut, setSigningOut] = useState(false);
 
   const handleSignOut = async () => {
@@ -68,6 +70,7 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="rounded-xl border border-borderSecondary bg-background shadow-sm p-4 md:p-6">
+        {activeTab === "analytics" && <AnalyticsPanel />}
         {activeTab === "blog" && <BlogEditorPage />}
         {activeTab === "projects" && (
           <div className="space-y-4 rounded-xl border border-borderSecondary bg-secondary/30 p-6">

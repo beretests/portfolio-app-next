@@ -12,6 +12,7 @@ const ADMIN_PATHS = [
   "/api/resume/admin/upload",
   "/api/resume/admin/save",
   "/api/resume/admin/content",
+  "/api/admin",
 ];
 
 function unauthorized() {
@@ -86,6 +87,7 @@ export const config = {
     "/api/blog/admin/:path*",
     "/api/about/admin/:path*",
     "/api/resume/admin/:path*",
+    "/api/admin/:path*",
     "/admin",
     "/blog/admin/sign-in",
   ],
