@@ -41,7 +41,15 @@ export function useTracking() {
       if (!response.ok) {
         console.error("Failed to track page view");
       } else {
-        await response.json();
+        const data = await response.json();
+        window.dispatchEvent(
+          new CustomEvent("page-analytics", {
+            detail: {
+              pagePath: pathname,
+              count: data.pageUniqueVisitorCount,
+            },
+          })
+        );
       }
     };
 

@@ -7,22 +7,34 @@ export function VisitorCounter() {
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchCount = async () => {
-      const response = await fetch("/api/track");
-      if (response.ok) {
-        const data = await response.json();
-        setCount(data.count);
+      try {
+        const response = await fetch("/api/track", {
+          signal: controller.signal,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setCount(data.count);
+        }
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") {
+          console.error("Failed to load visitor count");
+        }
       }
     };
 
     fetchCount();
+    return () => controller.abort();
   }, []);
 
   if (count === null) return null;
 
   return (
-    <p className="text-secondary w-48 font-lg bg-primary font-semibold hover:bg-hover hover:text-primary rounded">
-      Unique Visitors: {count}
+    <p className="inline-flex items-center gap-2 rounded-full border border-borderSecondary bg-background/70 px-3 py-1.5 font-[family-name:var(--font-cta)] text-sm font-semibold text-foreground/70 shadow-sm backdrop-blur-sm">
+      <span className="h-2 w-2 rounded-full bg-primary" aria-hidden />
+      {count.toLocaleString()} unique site {count === 1 ? "visitor" : "visitors"}
     </p>
   );
 }
