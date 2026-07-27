@@ -23,6 +23,18 @@ function getClientIp(req: NextRequest) {
   return "unknown";
 }
 
+function normalizePagePath(value: unknown) {
+  if (typeof value !== "string" || value.length > 2048) return "/";
+
+  try {
+    const pathname = new URL(value, "https://analytics.local").pathname;
+    if (!pathname.startsWith("/")) return "/";
+    return pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
+  } catch {
+    return "/";
+  }
+}
+
 async function hashFingerprint(value: string) {
   const hashBuffer = await crypto.subtle.digest(
     "SHA-256",
@@ -63,7 +75,7 @@ export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
   const userAgent = body.userAgent || "unknown";
   const referrer = body.referrer || "";
-  const pageUrl = body.pageUrl || "";
+  const pageUrl = normalizePagePath(body.pageUrl);
   const origin = req.headers.get("origin") || req.headers.get("host") || "";
   const incomingSessionId = body.sessionId;
   const sessionId =
@@ -107,6 +119,25 @@ export async function POST(req: NextRequest) {
   if (insertError) {
     console.error("Error inserting visitor data:", insertError);
     return NextResponse.json({ error: insertError.message }, { status: 500 });
+  }
+
+  // Keep one row per visitor and page. Repeat views update recency without
+  // inflating the unique visitor count for that page.
+  const { error: pageVisitorError } = await supabaseAdmin
+    .from("page_visitors")
+    .upsert(
+      {
+        visitor_id: visitorId,
+        page_path: pageUrl,
+        last_seen: nowIso,
+      },
+      { onConflict: "visitor_id,page_path", ignoreDuplicates: false }
+    );
+
+  // Keep the existing site-wide tracker working while the analytics migration
+  // is being rolled out.
+  if (pageVisitorError) {
+    console.error("Error recording page visitor:", pageVisitorError);
   }
 
   try {
