@@ -21,10 +21,10 @@ A straightforward implementation could check whether an email exists and tell th
 
 The parent-facing response therefore stays neutral:
 
-```ts
+\`\`\`ts
 const connectionSuccess =
   "If this email can be connected, a secure link has been sent.";
-```
+\`\`\`
 
 The browser does not learn whether the address is registered. Exact-email account lookup happens only on the server through an administrative client, and the lookup operation is unavailable to anonymous or ordinary authenticated database roles.
 
@@ -37,9 +37,9 @@ The two account modes need different authentication behaviour:
 - A new address receives an invitation and creates credentials during acceptance.
 - An existing account receives a passwordless sign-in link and keeps its current credentials.
 
-For the existing-account path, the important option is `shouldCreateUser: false`:
+For the existing-account path, the important option is \`shouldCreateUser: false\`:
 
-```ts
+\`\`\`ts
 await auth.signInWithOtp({
   email,
   options: {
@@ -47,7 +47,7 @@ await auth.signInWithOtp({
     shouldCreateUser: false,
   },
 });
-```
+\`\`\`
 
 Without that constraint, a fallback intended only for existing users could silently create a new authentication record. The option turns the desired product rule into an explicit technical boundary.
 
@@ -125,13 +125,13 @@ That definition removes an important ambiguity. A surplus is not distributed acc
 
 Currency allocation should not depend on repeated floating-point arithmetic. Inputs and scheduled amounts are converted to integer cents before the split:
 
-```js
+\`\`\`js
 function toCents(value) {
   const amount = Number(value);
   if (!Number.isFinite(amount)) return NaN;
   return Math.round(amount * 100);
 }
-```
+\`\`\`
 
 The function rejects non-positive totals and invalid scheduled payments before constructing any database rows. Duplicate loan identifiers are also removed so the same obligation cannot receive two allocations because of repeated input.
 
@@ -145,7 +145,7 @@ The algorithm calculates each loan's proportional share of the available regular
 
 Rounding down creates a small remainder. Those cents are distributed in descending order of fractional remainder:
 
-```js
+\`\`\`js
 let centsLeft =
   regularBudgetCents -
   allocations.reduce(
@@ -156,7 +156,7 @@ let centsLeft =
 for (let index = 0; centsLeft > 0; index += 1, centsLeft -= 1) {
   remainderOrder[index % remainderOrder.length].allocatedCents += 1;
 }
-```
+\`\`\`
 
 This is a largest-remainder allocation. It ensures that the final cent values reconcile exactly to the payment while staying as close as possible to the proportional result.
 
