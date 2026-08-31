@@ -13,6 +13,9 @@ import {
 } from "@/lib/blog";
 import { supabase } from "@/lib/supabase";
 import BlogViewCount from "@/app/components/BlogViewCount";
+import JsonLd from "@/app/components/JsonLd";
+import { getPublicPostBySlug, getPublicPosts } from "@/lib/blog-server";
+import { absoluteUrl, siteName } from "@/lib/site";
 
 export const dynamicParams = true;
 
@@ -20,22 +23,22 @@ type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return curatedBlogPosts.map((post) => ({ slug: post.slug }));
+export async function generateStaticParams() {
+  const posts = await getPublicPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 async function getPost(slug: string, isAdmin = false) {
+  if (!isAdmin) return getPublicPostBySlug(slug);
+
   const curatedPost = getCuratedPostBySlug(slug);
   if (curatedPost) return { ...curatedPost, source: "code" } as BlogPost;
 
-  let query = supabase
+  const { data, error } = await supabase
     .from("posts")
     .select("slug,title,description,tag,image,date,body")
-    .eq("slug", slug);
-
-  if (!isAdmin) query = query.neq("tag", "Testing");
-
-  const { data, error } = await query.maybeSingle();
+    .eq("slug", slug)
+    .maybeSingle();
 
   if (error) {
     console.error("Error fetching blog post:", error);
@@ -49,47 +52,84 @@ export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const post = await getPublicPostBySlug(slug);
 
-  if (!post) return { title: "Article not found" };
+  if (!post) {
+    return {
+      title: "Article not found",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const canonicalPath = "/blog/" + post.slug;
+  const socialImage = post.image
+    ? absoluteUrl(post.image)
+    : absoluteUrl(canonicalPath + "/opengraph-image");
 
   return {
     title: post.title,
     description: post.description,
+    authors: [{ name: siteName, url: "/about" }],
+    alternates: {
+      canonical: canonicalPath,
+    },
     openGraph: {
       title: post.title,
       description: post.description,
       type: "article",
+      url: canonicalPath,
       publishedTime: post.date,
-      images: post.image ? [post.image] : undefined,
+      modifiedTime: post.date,
+      authors: [siteName],
+      images: [socialImage],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [socialImage],
     },
   };
 }
 
-function ArchitectureArtwork() {
-  const steps = ["Key Vault", "Event Grid", "Azure Functions", "Microsoft Graph"];
+type RelatedProject = {
+  href: string;
+  title: string;
+  label: string;
+  external?: boolean;
+};
 
+const relatedProjectsBySlug: Record<string, RelatedProject> = {
+  "resilient-event-driven-key-vault-credential-rotation": {
+    href: "/projects/event-driven-key-vault-credential-rotation",
+    title: "See the architecture in the project portfolio",
+    label: "View case study",
+  },
+  "connecting-existing-accounts-without-exposing-account-state": {
+    href: "/projects/family-chore-hub",
+    title: "See the family application case study",
+    label: "View family app case study",
+  },
+  "allocating-lump-sum-loan-payments-without-losing-a-cent": {
+    href: "https://github.com/beretests/loan-payback-tracker",
+    title: "Explore the loan payment tracker implementation",
+    label: "View GitHub repository",
+    external: true,
+  },
+};
+
+function FieldNoteArtwork({ post }: { post: BlogPost }) {
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-sky-950 via-blue-900 to-cyan-600 px-5 py-10 sm:px-10 sm:py-14">
       <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full border border-white/20 bg-white/5" />
       <p className="relative font-[family-name:var(--font-cta)] text-xs font-bold uppercase tracking-[0.2em] text-cyan-100">
-        Event-driven rotation path
+        {post.tag}
       </p>
-      <div className="relative mt-6 grid gap-3 sm:grid-cols-4">
-        {steps.map((step, index) => (
-          <div key={step} className="relative rounded-xl border border-white/25 bg-white/10 px-4 py-4 text-center text-sm font-bold text-white backdrop-blur-sm">
-            {step}
-            {index < steps.length - 1 && (
-              <span aria-hidden className="absolute -bottom-3 left-1/2 z-10 -translate-x-1/2 text-cyan-100 sm:-right-3 sm:bottom-auto sm:left-auto sm:top-1/2 sm:translate-x-0 sm:-translate-y-1/2">
-                →
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
-      <p className="relative mt-5 text-sm leading-6 text-cyan-50/85">
-        Table Storage provides locks and audit state; a timer-triggered reconciliation
-        function repairs missed work.
+      <p className="relative mt-6 max-w-4xl font-[family-name:var(--font-headings)] text-3xl font-bold leading-tight text-white sm:text-4xl">
+        {post.title}
+      </p>
+      <p className="relative mt-5 text-sm font-semibold text-cyan-50/85">
+        Engineering field note by {siteName}
       </p>
     </div>
   );
@@ -102,13 +142,45 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   if (!post) notFound();
 
-  const relatedPosts = curatedBlogPosts
+  const publicPosts = await getPublicPosts();
+  const relatedPosts = publicPosts
     .filter((candidate) => candidate.slug !== post.slug)
     .filter((candidate) => candidate.tag === post.tag)
     .slice(0, 3);
+  const relatedProject = relatedProjectsBySlug[post.slug];
+  const canonicalUrl = absoluteUrl("/blog/" + post.slug);
+  const socialImage = post.image
+    ? absoluteUrl(post.image)
+    : absoluteUrl("/blog/" + post.slug + "/opengraph-image");
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    image: socialImage,
+    datePublished: post.date,
+    dateModified: post.date,
+    mainEntityOfPage: canonicalUrl,
+    author: {
+      "@type": "Person",
+      name: siteName,
+      url: absoluteUrl("/about"),
+    },
+    publisher: {
+      "@type": "Person",
+      name: siteName,
+      url: absoluteUrl("/"),
+    },
+    isPartOf: {
+      "@type": "Blog",
+      name: "Engineering Field Notes",
+      url: absoluteUrl("/blog"),
+    },
+  };
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 lg:px-8">
+      <JsonLd data={articleJsonLd} />
       <Link href="/blog" className="inline-flex items-center rounded-md border border-borderSecondary bg-background px-3 py-2 text-sm font-bold text-foreground transition hover:bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
         ← Back to field notes
       </Link>
@@ -140,7 +212,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <Image src={post.image} alt="" fill sizes="(min-width: 1024px) 960px, 100vw" className="object-cover" priority />
             </div>
           ) : (
-            <ArchitectureArtwork />
+            <FieldNoteArtwork post={post} />
           )}
         </div>
 
@@ -169,19 +241,35 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       </article>
 
-      <aside className="mt-8 rounded-2xl border border-borderSecondary bg-secondary/30 p-6 sm:flex sm:items-center sm:justify-between sm:gap-6">
-        <div>
-          <p className="font-[family-name:var(--font-cta)] text-xs font-bold uppercase tracking-[0.16em] text-primary">
-            Continue exploring
-          </p>
-          <h2 className="mt-2 font-[family-name:var(--font-headings)] text-2xl font-bold text-foreground">
-            See the architecture in the project portfolio
-          </h2>
-        </div>
-        <Link href="/projects/event-driven-key-vault-credential-rotation" className="mt-4 inline-flex shrink-0 rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-background transition hover:opacity-90 sm:mt-0">
-          View case study →
-        </Link>
-      </aside>
+      {relatedProject && (
+        <aside className="mt-8 rounded-2xl border border-borderSecondary bg-secondary/30 p-6 sm:flex sm:items-center sm:justify-between sm:gap-6">
+          <div>
+            <p className="font-[family-name:var(--font-cta)] text-xs font-bold uppercase tracking-[0.16em] text-primary">
+              Continue exploring
+            </p>
+            <h2 className="mt-2 font-[family-name:var(--font-headings)] text-2xl font-bold text-foreground">
+              {relatedProject.title}
+            </h2>
+          </div>
+          {relatedProject.external ? (
+            <a
+              href={relatedProject.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex shrink-0 rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-background transition hover:opacity-90 sm:mt-0"
+            >
+              {relatedProject.label} →
+            </a>
+          ) : (
+            <Link
+              href={relatedProject.href}
+              className="mt-4 inline-flex shrink-0 rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-background transition hover:opacity-90 sm:mt-0"
+            >
+              {relatedProject.label} →
+            </Link>
+          )}
+        </aside>
+      )}
 
       {relatedPosts.length > 0 && (
         <section aria-labelledby="related-posts" className="mt-10">
