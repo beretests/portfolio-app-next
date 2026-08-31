@@ -1,6 +1,218 @@
 import type { BlogPost } from "@/lib/blog";
 
 export const curatedBlogPosts: BlogPost[] = [
+
+  {
+    slug: "connecting-existing-accounts-without-exposing-account-state",
+    title: "Connecting existing accounts without exposing account state",
+    description:
+      "How I extended a family invitation workflow to support existing accounts while preserving credentials, preventing account enumeration and enforcing access rules at the database boundary.",
+    tag: "Application Security",
+    date: "2026-08-31",
+    body: `Adding an email invitation sounds like a small product feature. It becomes a security design problem when the same address might belong to a new user, an existing user or someone who already belongs to another family.
+
+I encountered that boundary while extending a family-management application. Parents could already create a child profile and invite a new email address to claim it. The next requirement was to let an existing app account connect to that profile without resetting its password, changing its sign-in methods or creating a duplicate family member.
+
+This field note describes the design decisions behind that workflow. Real email addresses, invitation values, environment details and organization-specific identifiers are intentionally omitted.
+
+## Start with the privacy question
+
+A straightforward implementation could check whether an email exists and tell the parent which path will be used. That would also turn the form into an account-discovery endpoint.
+
+The parent-facing response therefore stays neutral:
+
+\`\`\`ts
+const connectionSuccess =
+  "If this email can be connected, a secure link has been sent.";
+\`\`\`
+
+The browser does not learn whether the address is registered. Exact-email account lookup happens only on the server through an administrative client, and the lookup operation is unavailable to anonymous or ordinary authenticated database roles.
+
+Neutral messaging is only one layer. The authorization rules still have to reject invalid requests, but they do so without exposing unnecessary account state to the person initiating the invitation.
+
+## Separate new-account and existing-account paths
+
+The two account modes need different authentication behaviour:
+
+- A new address receives an invitation and creates credentials during acceptance.
+- An existing account receives a passwordless sign-in link and keeps its current credentials.
+
+For the existing-account path, the important option is \`shouldCreateUser: false\`:
+
+\`\`\`ts
+await auth.signInWithOtp({
+  email,
+  options: {
+    emailRedirectTo: redirectTo,
+    shouldCreateUser: false,
+  },
+});
+\`\`\`
+
+Without that constraint, a fallback intended only for existing users could silently create a new authentication record. The option turns the desired product rule into an explicit technical boundary.
+
+The acceptance screen is mode-aware. Password inputs appear only for new accounts. Existing users see a clear explanation that their password and sign-in methods will not change.
+
+## Put the final rule at the database boundary
+
+Client checks improve the experience, but they cannot be the authority for a relationship-changing operation.
+
+Invitation acceptance is handled atomically on the server. Before attaching the authenticated profile to the child record, the operation verifies that:
+
+- the invitation is still pending and has not expired;
+- the signed-in account matches the invited email exactly;
+- the target child profile is still eligible to be connected; and
+- the account does not already have active family access.
+
+An occupied account is rejected instead of being silently merged across family contexts. That keeps the initial product model understandable: one active family context per authenticated account.
+
+The privileged lookup and acceptance operations are explicitly restricted to the service role. Browser roles cannot call them directly, even if someone discovers their names or signatures.
+
+## Minimize retained invitation data
+
+Once an invitation is accepted, its normalized email is scrubbed from the invitation record. Audit information records the workflow outcome and relevant internal record references, but not raw authentication links or bearer tokens.
+
+This distinction matters. Operational history is useful; retaining reusable authentication material is not.
+
+A related improvement allows an authorized parent to copy a generated invitation link when email delivery is unreliable. The raw URL is returned only in the action response and is never stored in application logs, invitation rows or audit metadata.
+
+## Test the boundaries that matter
+
+The workflow is covered at several levels:
+
+- component tests verify the correct password or passwordless interface;
+- browser tests exercise new-account linking, existing-account linking and credential preservation;
+- rejection coverage verifies that an account with active family access cannot be attached elsewhere; and
+- SQL verification checks role grants, safe defaults, exact-email matching, expiry, revocation and atomic acceptance.
+
+The credential-preservation test signs in again with the account's existing password after the family connection succeeds. That verifies the user-facing promise rather than only checking that a database row changed.
+
+## What I would carry into the next authentication feature
+
+Three principles generalize beyond family invitations:
+
+1. **Do not expose account existence unless the product genuinely requires it.** Neutral responses and server-only lookup reduce enumeration risk.
+2. **Encode negative requirements explicitly.** If a flow must never create a user, configure the provider to enforce that rule.
+3. **Authorize relationship changes at the database boundary.** UI checks are helpful, but atomic server-side rules decide whether the change is valid.
+
+The result is an invitation flow that supports more real-world account states without weakening privacy or surprising existing users.`,
+  },
+  {
+    slug: "allocating-lump-sum-loan-payments-without-losing-a-cent",
+    title: "Splitting a lump-sum loan payment without losing a cent",
+    description:
+      "Designing a predictable allocation algorithm that distributes one payment across multiple loans, reconciles rounding and directs any surplus toward principal.",
+    tag: "Product Engineering",
+    date: "2026-08-31",
+    body: `A single payment can represent several different financial actions. In a loan-tracking application, one lump sum may need to cover the scheduled amount on multiple loans and then apply the remaining money as an extra principal payment.
+
+The form is the easy part. The harder problem is making the allocation predictable, ensuring the stored rows add back to the original amount and keeping the preview consistent with what is eventually saved.
+
+This field note describes the domain logic behind that feature. It uses generalized examples and contains no real balances, lender information, account details or database identifiers.
+
+## Define the business rule before the algorithm
+
+The allocation follows four rules:
+
+1. The user selects one or more editable loans.
+2. The payment first covers each selected loan's scheduled monthly amount.
+3. If the payment is smaller than the combined schedule, it is split proportionally.
+4. If the payment is larger, the remainder becomes an extra principal payment on a loan chosen by the user.
+
+That definition removes an important ambiguity. A surplus is not distributed accidentally across every loan; it has one explicit principal target.
+
+## Calculate in cents
+
+Currency allocation should not depend on repeated floating-point arithmetic. Inputs and scheduled amounts are converted to integer cents before the split:
+
+\`\`\`js
+function toCents(value) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return NaN;
+  return Math.round(amount * 100);
+}
+\`\`\`
+
+The function rejects non-positive totals and invalid scheduled payments before constructing any database rows. Duplicate loan identifiers are also removed so the same obligation cannot receive two allocations because of repeated input.
+
+The browser restricts input to two decimal places, while the allocation function performs its own validation instead of trusting the form.
+
+## Handle a short payment fairly
+
+Suppose the selected loans have different monthly obligations and the available payment cannot cover all of them. Giving every loan the same amount would ignore those differences.
+
+The algorithm calculates each loan's proportional share of the available regular-payment budget. Each exact share may contain a fraction of a cent, so the initial allocation is rounded down.
+
+Rounding down creates a small remainder. Those cents are distributed in descending order of fractional remainder:
+
+\`\`\`js
+let centsLeft =
+  regularBudgetCents -
+  allocations.reduce(
+    (sum, loan) => sum + loan.allocatedCents,
+    0,
+  );
+
+for (let index = 0; centsLeft > 0; index += 1, centsLeft -= 1) {
+  remainderOrder[index % remainderOrder.length].allocatedCents += 1;
+}
+\`\`\`
+
+This is a largest-remainder allocation. It ensures that the final cent values reconcile exactly to the payment while staying as close as possible to the proportional result.
+
+## Model regular and extra payments separately
+
+When the total exceeds the combined monthly obligations, the regular allocations are created first. The surplus is then represented as a separate extra-payment event for the selected target loan.
+
+That distinction feeds the rest of the application:
+
+- regular payments participate in scheduled-payment status;
+- extra payments reduce principal;
+- actual history can explain what happened; and
+- forecasts can include recorded principal reductions when estimating payoff.
+
+Keeping the event types separate avoids hiding principal-only behaviour inside an ordinary monthly payment.
+
+## Use one function for preview and persistence
+
+The allocation logic is a pure function. The form calls it to produce a live payment preview, and the save handler calls the same function again before inserting the resulting rows.
+
+This prevents a common UI failure: showing one calculation to the user but reproducing the logic differently when saving.
+
+The preview lists every regular allocation, identifies the extra-payment target and confirms the total. If the inputs do not form a valid allocation, no preview is shown and the submission returns a specific validation message.
+
+## Revalidate ownership before writing
+
+A list displayed in the browser is not an authorization boundary. Immediately before saving, the selected identifiers are matched against loans owned by the signed-in user.
+
+If the validated set does not contain every submitted identifier, the operation stops. Database row-level security remains the final protection, while the server-side check provides a clearer application error and prevents invalid rows from being prepared.
+
+The allocations are inserted together so the payment is not intentionally saved as a collection of unrelated form submissions.
+
+## Hardening cases
+
+The most valuable automated tests for this function are table-driven examples covering:
+
+- a payment equal to the scheduled total;
+- a payment smaller than the total;
+- fractional-cent remainders;
+- a payment with an extra-principal remainder;
+- duplicate selections;
+- zero or invalid scheduled amounts; and
+- a submitted loan that the current user cannot edit.
+
+The allocation function was kept independent of React and the database specifically so these cases can be exercised without rendering the application.
+
+## What I would carry into the next financial feature
+
+Three decisions made the feature easier to reason about:
+
+1. **Represent money in the smallest unit during allocation.**
+2. **Keep the business rule in one pure function used by both preview and save.**
+3. **Represent meaning in the data model.** A regular payment and an extra principal payment may occur together, but they are not the same event.
+
+The broader lesson is that small financial features deserve explicit rules. A few cents of unexplained drift can undermine trust in the entire product.`,
+  },
   {
     slug: "resilient-event-driven-key-vault-credential-rotation",
     title: "Designing resilient event-driven credential rotation with Azure Key Vault",
