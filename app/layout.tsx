@@ -8,6 +8,12 @@ import Favicon from "./images/portfolio-logo-white.png";
 import Footer from "./components/Footer";
 import { TrackingComponent } from "./TrackingComponent";
 import { Suspense } from "react";
+import {
+  siteDescription,
+  siteName,
+  siteTitle,
+  siteUrl,
+} from "@/lib/site";
 
 const sourceSans = localFont({
   src: "./fonts/SourceSans3-VariableFont_wght.ttf",
@@ -40,12 +46,32 @@ const engagement = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Eberechi Omeje | Power Platform, Azure & Full-Stack Engineer",
-    template: "%s | Eberechi Omeje",
+    default: siteTitle,
+    template: "%s | " + siteName,
   },
-  description:
-    "Portfolio of Eberechi Omeje, a Power Platform engineer, Microsoft Azure solutions architect and full-stack software engineer.",
+  description: siteDescription,
+  authors: [{ name: siteName, url: "/about" }],
+  creator: siteName,
+  publisher: siteName,
+  category: "technology",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName,
+    title: siteTitle,
+    description: siteDescription,
+  },
+  twitter: {
+    card: "summary",
+    title: siteTitle,
+    description: siteDescription,
+  },
   icons: [{ rel: "icon", type: "image/png", url: Favicon.src }],
 };
 

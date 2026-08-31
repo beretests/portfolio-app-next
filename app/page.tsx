@@ -1,5 +1,26 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import HeroSection from "./components/HeroSection";
+import JsonLd from "./components/JsonLd";
+import {
+  absoluteUrl,
+  siteDescription,
+  siteName,
+  siteTitle,
+  siteUrl,
+  socialProfiles,
+} from "@/lib/site";
+
+
+export const metadata: Metadata = {
+  title: {
+    absolute: siteTitle,
+  },
+  description: siteDescription,
+  alternates: {
+    canonical: "/",
+  },
+};
 
 const expertise = [
   {
@@ -20,8 +41,44 @@ const expertise = [
 ];
 
 export default function Home() {
+  const profileJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    name: siteTitle,
+    description: siteDescription,
+    url: siteUrl,
+    mainEntity: {
+      "@type": "Person",
+      name: siteName,
+      url: siteUrl,
+      jobTitle:
+        "Power Platform Engineer, Azure Solutions Architect and Full-Stack Software Engineer",
+      description: siteDescription,
+      sameAs: socialProfiles,
+      knowsAbout: [
+        "Microsoft Power Platform",
+        "Microsoft Azure",
+        "Microsoft 365",
+        "Dataverse",
+        "Microsoft Graph",
+        "Identity and access management",
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Cloud architecture",
+        "Software quality engineering",
+      ],
+      homeLocation: {
+        "@type": "Country",
+        name: "Canada",
+      },
+    },
+    mainEntityOfPage: absoluteUrl("/"),
+  };
+
   return (
     <main>
+      <JsonLd data={profileJsonLd} />
       <HeroSection />
 
       <section className="container mx-auto px-6 py-20 lg:px-12">
