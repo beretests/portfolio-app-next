@@ -6,6 +6,16 @@ export const metadata: Metadata = {
   title: "Projects",
   description:
     "Selected Power Platform, Microsoft Azure, Microsoft 365 and full-stack engineering work by Eberechi Omeje.",
+  alternates: {
+    canonical: "/projects",
+  },
+  openGraph: {
+    title: "Engineering Projects",
+    description:
+      "Power Platform, Azure, Microsoft 365 and full-stack case studies by Eberechi Omeje.",
+    type: "website",
+    url: "/projects",
+  },
 };
 
 export default function ProjectsPage() {
