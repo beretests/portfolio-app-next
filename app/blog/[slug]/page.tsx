@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import Markdown from "markdown-to-jsx";
-import { curatedBlogPosts, getCuratedPostBySlug } from "@/data/blog-posts";
+import { getCuratedPostBySlug } from "@/data/blog-posts";
 import { isValidAdminToken } from "@/lib/admin-auth";
 import {
   formatBlogDate,
