@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { projects } from "@/data/projects";
+import JsonLd from "@/app/components/JsonLd";
+import { absoluteUrl, siteName } from "@/lib/site";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
@@ -21,9 +23,22 @@ export async function generateMetadata({
     return { title: "Project not found" };
   }
 
+  const canonicalPath = "/projects/" + project.id;
+
   return {
     title: project.name,
     description: project.overview,
+    authors: [{ name: siteName, url: "/about" }],
+    alternates: {
+      canonical: canonicalPath,
+    },
+    openGraph: {
+      title: project.name,
+      description: project.overview,
+      type: "article",
+      url: canonicalPath,
+      images: project.imageUrl ? [absoluteUrl(project.imageUrl)] : undefined,
+    },
   };
 }
 
@@ -35,8 +50,29 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
+  const projectUrl = absoluteUrl("/projects/" + project.id);
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type":
+      project.projectType === "Public project"
+        ? "SoftwareSourceCode"
+        : "CreativeWork",
+    name: project.name,
+    description: project.overview,
+    url: projectUrl,
+    image: project.imageUrl ? absoluteUrl(project.imageUrl) : undefined,
+    codeRepository: project.githubUrl,
+    programmingLanguage: project.techStack,
+    author: {
+      "@type": "Person",
+      name: siteName,
+      url: absoluteUrl("/about"),
+    },
+  };
+
   return (
     <main className="container mx-auto max-w-6xl px-4 py-10 lg:px-8">
+      <JsonLd data={projectJsonLd} />
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/projects"
