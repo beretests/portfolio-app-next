@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import SkillsIcons, {
   iconNames,
   type IconName,
   type SkillsIconItem,
 } from "../components/SkillsIcon";
 import { supabaseAdmin } from "@/lib/supabase-server";
+
+export const metadata: Metadata = {
+  title: "Resume",
+  description:
+    "Resume of Eberechi Omeje: Power Platform, Azure, Microsoft 365, full-stack engineering, QA and DevOps experience.",
+  alternates: {
+    canonical: "/resume",
+  },
+};
 
 type WorkItem = {
   role: string;
