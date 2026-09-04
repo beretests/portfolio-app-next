@@ -1,6 +1,85 @@
 import type { BlogPost } from "@/lib/blog";
 
 export const curatedBlogPosts: BlogPost[] = [
+  {
+    slug: "dates-arent-timestamps-reliable-calendar-saves",
+    title: "Dates Aren’t Timestamps: Reliable Calendar Saves Across Time Zones",
+    description:
+      "How I preserved date-only calendar intent across time zones and made event creation safe to retry with end-to-end idempotency.",
+    tag: "Product Engineering",
+    date: "2026-09-04",
+    body: `Calendar bugs often look trivial from the outside: a selected day displays the wrong date, or a second event appears after someone retries a save. Underneath, both failures point to the same design problem—the application has allowed infrastructure details to replace the user's intent.
+
+I ran into both issues while hardening the schedule in a family-management application. A day chosen in the calendar needed to remain that day in the browser's time zone, while event creation needed to remain safe when a successful write was followed by a failed refresh.
+
+## One workflow, two kinds of ambiguity
+
+A calendar date and an instant are related, but they are not interchangeable.
+
+When a user selects September 12, the value represents a civil date: a day on a calendar. It has no hour and no UTC offset. Converting it too early into a JavaScript Date can attach an implicit midnight and time zone. As that value moves between server and client components, formatting or serialization can make it appear as September 11 or September 13.
+
+The save path had a different ambiguity. If the database accepted a new event but the page refresh failed, the interface could not tell whether the write had completed. Retrying the request might create the event again.
+
+The fix therefore had two goals: preserve date meaning until a time-zone boundary is actually required, and give every create attempt a stable identity.
+
+## Keep civil dates as civil dates
+
+The schedule now carries selected days and week columns as validated YYYY-MM-DD strings across the server/client boundary. Date-only helpers handle validation, labels, weekday calculation, week boundaries and calendar-day arithmetic without depending on the host machine's local time zone.
+
+Only operations that genuinely need an instant perform a conversion. Query boundaries are derived from midnight in the browser's explicit IANA time zone:
+
+    const queryStartsAt = startOfZonedDay(selectedDate, timeZone);
+    const queryEndsAt = startOfZonedDay(
+      addCalendarDays(selectedDate, 1),
+      timeZone,
+    );
+
+The end is exclusive. Events are selected using overlap semantics, so an overnight event that crosses local midnight can appear on both affected civil days. Timed form values become UTC only when prepared for storage.
+
+This separates two concepts cleanly: calendar navigation operates on civil dates, while persisted event times remain absolute instants. The server's location no longer decides which heading or column a user sees.
+
+## Give each create attempt an identity
+
+Preventing a double-click in the interface helps, but it does not make the write safe. Networks retry, browsers resubmit and responses can disappear after the database commits.
+
+Each manually opened create form now generates one UUID and keeps it for the lifetime of that form. The value is submitted as an idempotency key. The database stores it with the event and enforces uniqueness for the creator, allowing two different family members to use the same random value without colliding.
+
+On a repeated request, the insert encounters the uniqueness constraint. Instead of treating that as a new failure—or running a second collection of related writes—the server retrieves the event created by the original attempt and returns its identifier with a replayed result.
+
+That means attendee links, recurrence records and audit entries are not written twice. The important guarantee is not merely “two rows cannot look alike.” It is “this specific request can have only one effect.” Two genuinely separate events may still share the same title and time.
+
+## Make retries honest and safe
+
+The interface disables the active submission, but the database guarantee remains authoritative. A successful server action performs one schedule invalidation rather than combining multiple refresh mechanisms.
+
+If the write succeeds and the refreshed calendar fails to render, a schedule-specific error boundary explains that the last change may already be saved. The user can retry the refresh safely because repeating the create request cannot create another event.
+
+This is a small usability detail with architectural consequences: the error message is only truthful because the write path is idempotent.
+
+## Test meanings, not just functions
+
+The most useful tests describe the product promises:
+
+- September 12 remains September 12 in America/Regina.
+- Week navigation crosses month boundaries without shifting dates.
+- Invalid values such as February 30 fall back safely.
+- An event crossing local midnight appears on both relevant days.
+- Replaying one creator's UUID returns the original event.
+- The same UUID remains valid for a different creator.
+- A failed refresh offers a safe retry instead of encouraging another blind save.
+
+Coverage spans date helpers, component rendering, server-action replay behaviour, browser tests with an explicit Regina time zone and SQL verification of the database constraint.
+
+## What I would carry forward
+
+Three lessons extend beyond calendars:
+
+1. **Model the user's concept directly.** A date-only value should not become a timestamp merely because the platform makes timestamps convenient.
+2. **Design every important write for an uncertain response.** Success can occur even when the client never receives confirmation.
+3. **Make error recovery a system property.** A retry button is trustworthy only when the operation behind it is safe to repeat.
+
+The visible result is simple: dates stay in the correct column, and retries do not create duplicates. The engineering value lies in preserving intent across time zones, rendering boundaries, network failures and database writes.`,
+  },
 
   {
     slug: "connecting-existing-accounts-without-exposing-account-state",
