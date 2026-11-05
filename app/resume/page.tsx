@@ -5,6 +5,11 @@ import SkillsIcons, {
   type SkillsIconItem,
 } from "../components/SkillsIcon";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import {
+  mergeCertifications,
+  newCertifications,
+  type CertificationItem,
+} from "@/data/certifications";
 
 export const metadata: Metadata = {
   title: "Resume",
@@ -26,12 +31,6 @@ type EducationItem = {
   degree: string;
   dates: string;
   details?: string;
-};
-type CertificationItem = {
-  name: string;
-  issuer?: string;
-  date?: string;
-  status?: "Earned" | "Planned";
 };
 type LangFramework = { name: string; icon?: string | null };
 
@@ -147,6 +146,7 @@ const fallback = {
     "Security, Governance & Compliance",
   ],
   certifications: [
+    ...newCertifications,
     {
       name: "Microsoft 365 Certified: Administrator Expert",
       issuer: "Microsoft",
@@ -173,12 +173,6 @@ const fallback = {
       status: "Earned",
     },
     {
-      name: "AI-901: Microsoft Azure AI Fundamentals",
-      issuer: "Microsoft",
-      date: "Target: 2026",
-      status: "Planned",
-    },
-    {
       name: "AI-103: Azure AI Apps and Agents Developer Associate",
       issuer: "Microsoft",
       date: "Target: 2026",
@@ -186,12 +180,6 @@ const fallback = {
     },
     {
       name: "AB-100: Agentic AI Business Solutions Architect",
-      issuer: "Microsoft",
-      date: "Target: 2026",
-      status: "Planned",
-    },
-    {
-      name: "PL-400: Power Platform Developer Associate",
       issuer: "Microsoft",
       date: "Target: 2026",
       status: "Planned",
@@ -251,8 +239,10 @@ export default async function ResumePage() {
   const education = ((currentContent?.education as EducationItem[]) ||
     fallback.education) as EducationItem[];
   const skills = (currentContent?.skills as string[]) || fallback.skills;
-  const certifications = ((currentContent?.certifications as CertificationItem[]) ||
-    fallback.certifications) as CertificationItem[];
+  const certifications = mergeCertifications(
+    (currentContent?.certifications as CertificationItem[]) ||
+      (fallback.certifications as CertificationItem[])
+  );
   const allowedIcons = new Set<IconName>(iconNames);
   const configuredLanguages = (
     (currentContent?.languages_frameworks as LangFramework[]) ||
@@ -361,6 +351,18 @@ export default async function ResumePage() {
                     {cert.date}
                   </p>
                 )}
+                {cert.status === "Earned" &&
+                  cert.credentialUrl?.startsWith("https://") && (
+                    <a
+                      href={cert.credentialUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`View credential: ${cert.name} (opens in a new tab)`}
+                      className="inline-block text-sm text-primary underline underline-offset-4 hover:no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+                    >
+                      View credential
+                    </a>
+                  )}
               </div>
             ))}
           </div>
