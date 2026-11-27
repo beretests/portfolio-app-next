@@ -345,7 +345,7 @@ export default async function ResumePage() {
                     {cert.date}
                   </p>
                 )}
-                {cert.status === "Earned" &&
+                {cert.status !== "Planned" &&
                   cert.credentialUrl?.startsWith("https://") && (
                     <a
                       href={cert.credentialUrl}
