@@ -8,6 +8,14 @@ export type CertificationItem = {
 
 export const newCertifications: CertificationItem[] = [
   {
+    name: "Microsoft Certified: Agentic AI Business Solutions Architect Expert",
+    issuer: "Microsoft",
+    date: "November 20, 2026",
+    status: "Earned",
+    credentialUrl:
+      "https://learn.microsoft.com/api/credentials/share/en-us/EbyO-6154/3EBCF30A1020DAB7?sharingId=2F77B610DFCB0724",
+  },
+  {
     name: "Microsoft Certified: Azure AI Fundamentals",
     issuer: "Microsoft",
     date: "September 11, 2026",
@@ -29,9 +37,10 @@ function credentialName(name: string) {
   return name
     .trim()
     .toLowerCase()
-    .replace(/^(?:ai-900|ai-901|pl-400):\s*/, "")
+    .replace(/^(?:ai-900|ai-901|pl-400|ab-100):\s*/, "")
     .replace(/^microsoft(?: certified)?:\s*/, "")
-    .replace(/^microsoft\s+/, "");
+    .replace(/^microsoft\s+/, "")
+    .replace(/^agentic ai business solutions architect$/, "agentic ai business solutions architect expert");
 }
 
 // Keep the newly earned credentials current even when stored resume content

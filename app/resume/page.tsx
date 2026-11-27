@@ -178,12 +178,6 @@ const fallback = {
       date: "Target: 2026",
       status: "Planned",
     },
-    {
-      name: "AB-100: Agentic AI Business Solutions Architect",
-      issuer: "Microsoft",
-      date: "Target: 2026",
-      status: "Planned",
-    },
   ],
   languages_frameworks: [
     { name: "React", icon: "React" },
