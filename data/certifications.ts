@@ -33,10 +33,16 @@ export const newCertifications: CertificationItem[] = [
   },
 ];
 
+const verifiedCredentialLinks: Record<string, string> = {
+  "az-300 microsoft azure architect technologies":
+    "https://www.credly.com/badges/b1ef9b4c-e9b5-4986-9b4a-ec7bcb4041b4/linked_in_profile",
+};
+
 function credentialName(name: string) {
   return name
     .trim()
     .toLowerCase()
+    .replace(/^az-300:\s*/, "az-300 ")
     .replace(/^(?:ai-900|ai-901|pl-400|ab-100):\s*/, "")
     .replace(/^microsoft(?: certified)?:\s*/, "")
     .replace(/^microsoft\s+/, "")
@@ -52,5 +58,10 @@ export function mergeCertifications(items: CertificationItem[]) {
   return [
     ...newCertifications,
     ...items.filter((cert) => !updatedNames.has(credentialName(cert.name))),
-  ];
+  ].map((cert) => {
+    const credentialUrl = verifiedCredentialLinks[credentialName(cert.name)];
+    return credentialUrl && cert.status !== "Planned"
+      ? { ...cert, credentialUrl }
+      : cert;
+  });
 }
